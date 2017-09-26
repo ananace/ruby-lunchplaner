@@ -1,3 +1,6 @@
+require 'nokogiri'
+require 'open-uri'
+
 module Lunchplaner
   class Backend
     def self.url(url = nil)
@@ -16,8 +19,18 @@ module Lunchplaner
       nil
     end
 
-    def to_title
-      self.class.name
+    def all
+      { daily: daily, weekly: weekly }
+    end
+
+    def to_s
+      self.class.name.split(':').last
+    end
+
+    protected
+
+    def data
+      @data ||= Nokogiri::HTML(open(url))
     end
   end
 end

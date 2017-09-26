@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require 'lunchplaner'
+Lunchplaner.today.each do |e|
+  r = e.keys.first
+  menu = e.values.first
+  puts "#{r}:"
+  if menu[:daily]
+    puts "  Dagens:"
+    menu[:daily].each do |f|
+      puts "  - #{f}"
+    end
+  end
+  if menu[:weekly]
+    puts "  Veckans:"
+    menu[:weekly].each do |f|
+      puts "  - #{f}"
+    end
+  end
+end
