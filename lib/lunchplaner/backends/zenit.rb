@@ -8,7 +8,9 @@ module Lunchplaner
       end
 
       def weekly
-        data.css('.hors-menu .row .text-left').last.content.strip.split("\n")
+        data.css('.hors-menu .row .text-left').last.content.strip.split("\n").map do |e|
+          e.gsub(/.*:\W+/, '')
+        end
       end
     end
   end

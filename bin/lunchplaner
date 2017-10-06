@@ -7,13 +7,13 @@ Lunchplaner.today.each do |e|
   puts "#{r}:"
   if menu[:daily]
     puts "  Dagens:"
-    menu[:daily].each do |f|
+    [menu[:daily]].flatten.each do |f|
       puts "  - #{f}"
     end
   end
   if menu[:weekly]
     puts "  Veckans:"
-    menu[:weekly].each do |f|
+    [menu[:weekly]].flatten.each do |f|
       puts "  - #{f}"
     end
   end
