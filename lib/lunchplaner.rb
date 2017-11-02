@@ -15,6 +15,7 @@ module Lunchplaner
     autoload :Collegium,           'lunchplaner/backends/collegium'
     autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben'
     autoload :Matkultur,           'lunchplaner/backends/matkultur'
+    autoload :Vallastaden,         'lunchplaner/backends/vallastaden'
     autoload :Zenit,               'lunchplaner/backends/zenit'
   end
 end
