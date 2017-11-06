@@ -4,11 +4,11 @@ module Lunchplaner
       url 'http://torgetvallastaden.se/'
 
       def daily
-        data[:daily]
+        data[:daily].gsub(/ ,/, ',')
       end
 
       def weekly
-        data[:weekly]
+        data[:weekly].map { |el| el.gsub(/ ,/, ',') }
       end
 
       def to_s
@@ -19,7 +19,7 @@ module Lunchplaner
 
       def data
         @data ||= (
-          menu = Nokogiri::HTML(open(url)).at_css('#meny').xpath('.//p')
+          menu = Nokogiri::HTML(open(url)).at_css('#meny').xpath('.//span')
           daily = menu.find do |el|
             b = el.at_css('b')
             next unless b
@@ -39,18 +39,18 @@ module Lunchplaner
           end.content.split("\n")[1]]
 
           found_weekly = false
-          menu.each_with_object(weekly) do |el, week|
+          menu.each do |el|
             if !found_weekly
               b = el.at_css('b')
               next if not b or !b.content.include?('Serveras hela dagen')
               found_weekly = true
             end
 
-            c = el.content.split("\n")
+            c = el.content.gsub(/\s\d+:-/, '').split("\n")
             if c.length > 1
-              week << c[1]
+              weekly << c[1]
             else
-              week << c[0]
+              weekly << c[0]
             end
           end
 
