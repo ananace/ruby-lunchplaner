@@ -1,6 +1,6 @@
 module Lunchplaner
   module Backends
-    class Chililime < Lunchplaner::Backend
+    class ChiliLime < Lunchplaner::Backend
       url 'http://chili-lime.se/'
 
       def daily

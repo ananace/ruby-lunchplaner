@@ -24,7 +24,11 @@ module Lunchplaner
     end
 
     def to_s
-      self.class.name.split(':').last
+      self.class.name.split('::').last
+    end
+
+    def name
+      to_s
     end
 
     protected

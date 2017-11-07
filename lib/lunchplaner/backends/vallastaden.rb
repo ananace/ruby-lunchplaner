@@ -44,6 +44,7 @@ module Lunchplaner
               b = el.at_css('b')
               next if not b or !b.content.include?('Serveras hela dagen')
               found_weekly = true
+              next
             end
 
             c = el.content.gsub(/\s\d+:-/, '').split("\n")
