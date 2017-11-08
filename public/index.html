@@ -12,9 +12,9 @@
         <h1 class="m-5">Loading, please wait...</h1>
       </div>
 
-      <div class="card-columns my-2" style="column-count: 2" v-else>
+      <div class="card-columns my-2" id="menyer" v-else>
         <div v-for="(place, clean_name) in backends">
-          <div class="card my-2" v-bind:id="clean_name">
+          <div class="card my-2" v-bind:class="{ 'border-primary': hovered == clean_name }" v-bind:id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
             <div class="card-header">
               {{ place.name }}
             </div>
@@ -42,6 +42,23 @@
       </div>
     </div>
 
+    <style>
+      body {
+        background-color: #eee;
+      }
+
+      @media (min-width: 576px) {
+        #menyer {
+          column-count: 1;
+        }
+      }
+      @media (min-width: 992px) {
+        #menyer {
+          column-count: 2;
+        }
+      }
+    </style>
+
     <script src="//unpkg.com/vue/dist/vue.min.js"></script>
     <script src="//unpkg.com/axios/dist/axios.min.js"></script>
 
@@ -51,7 +68,8 @@
 
                     data() {
                       return {
-                        backends: {}
+                        backends: {},
+                        hovered: null
                       }
                     },
 
