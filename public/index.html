@@ -78,26 +78,11 @@
                         for (it in resp.data) {
                           let name = resp.data[it];
                           Vue.set(App.backends, name, {});
-
-                          axios.get('/api/' + name + '/name').then(function(nresp) {
-                            Vue.set(App.backends[name], 'name', nresp.data);
-                          });
-                          axios.get('/api/' + name + '/url').then(function(uresp) {
-                            Vue.set(App.backends[name], 'url', uresp.data);
-                          });
-
-                          axios.get('/api/' + name + '/daily').then(function(dresp) {
-                            if (dresp.data) {
-                              Vue.set(App.backends[name], 'daily', dresp.data);
-                            }
-                          });
-
-                          axios.get('/api/' + name + '/weekly').then(function(wresp) {
-                            if (wresp.data) {
-                              Vue.set(App.backends[name], 'weekly', wresp.data);
-                            }
-                          });
                         }
+                      });
+
+                      axios.get('/api/all').then(function(resp) {
+                        App.backends = Object.assign({}, resp.data);
                       });
                     }
       });

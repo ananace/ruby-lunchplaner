@@ -11,7 +11,7 @@ module Lunchplaner
 
       def data
         day = nil
-        @data ||= Nokogiri::HTML(open(url)).at_css('.meny:first').inner_html.split('<br>').each_with_object([]) do |e, a|
+        raw_data.at_css('.meny:first').inner_html.split('<br>').each_with_object([]) do |e, a|
           if day
             if e.empty?
               day = nil

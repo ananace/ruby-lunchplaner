@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'bin'
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'mini_cache', '~> 1.1'
   spec.add_dependency 'nokogiri', '~> 1.8'
   spec.add_dependency 'sinatra', '~> 2.0'
 

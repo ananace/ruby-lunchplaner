@@ -1,3 +1,4 @@
+require 'mini_cache'
 require 'nokogiri'
 require 'open-uri'
 
@@ -33,8 +34,19 @@ module Lunchplaner
 
     protected
 
+    def cache
+      @@cache ||= MiniCache::Store.new
+    end
+
+    def raw_data
+      cache.get_or_set("raw_data-#{self.class.name}", expires_in: 1 * 60 * 60) do
+        puts "Refreshing cache for #{self.class.name}..."
+        Nokogiri::HTML(open(url))
+      end
+    end
+
     def data
-      @data ||= Nokogiri::HTML(open(url))
+      raw_data
     end
   end
 end

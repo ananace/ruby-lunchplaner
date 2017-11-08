@@ -14,7 +14,7 @@ module Lunchplaner
       private
 
       def data
-        @data ||= Nokogiri::HTML(open(url)).at_css('.wpb_wrapper h3').parent.css('p').map do |e|
+        raw_data.at_css('.wpb_wrapper h3').parent.css('p').map do |e|
           e.content.strip
         end.select { |d| !d.empty? }
       end
