@@ -11,6 +11,7 @@ ADD Gemfile* $APP_HOME/
 ADD *gemspec $APP_HOME/
 ADD bin $APP_HOME/bin/
 ADD lib $APP_HOME/lib/
+ADD public $APP_HOME/public/
 
 RUN bundle install --without development
 
