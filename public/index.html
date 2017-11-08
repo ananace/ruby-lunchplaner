@@ -7,7 +7,7 @@
     <title>Lunchrestauranger, nära Linköpings universitet</title>
   </head>
   <body>
-    <div id="app" class="container">
+    <div id="app" class="container" v-cloak>
       <div class="row" v-if="!backends">
         <h1 class="m-5">Loading, please wait...</h1>
       </div>
@@ -49,6 +49,10 @@
     <style>
       body {
         background-color: #eee;
+      }
+
+      [v-cloak] {
+        display: none;
       }
 
       @media (min-width: 576px) {
