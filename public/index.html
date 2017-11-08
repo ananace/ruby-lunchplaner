@@ -12,9 +12,9 @@
         <h1 class="m-5">Loading, please wait...</h1>
       </div>
 
-      <div class="row" v-else>
-        <div class="col-sm-6 col-xs-12" v-for="(place, clean_name) in backends">
-          <div class="card my-4" v-bind:id="clean_name">
+      <div class="card-columns my-2" style="column-count: 2" v-else>
+        <div v-for="(place, clean_name) in backends">
+          <div class="card my-2" v-bind:id="clean_name">
             <div class="card-header">
               {{ place.name }}
             </div>
