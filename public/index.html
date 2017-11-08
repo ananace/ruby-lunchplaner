@@ -85,7 +85,9 @@
                       axios.get('/api/names').then(function(resp) {
                         for (it in resp.data) {
                           let name = resp.data[it];
-                          Vue.set(App.backends, name, { 'name': name });
+                          if (!App.backends[name]) {
+                            Vue.set(App.backends, name, { 'name': name });
+                          }
                         }
                       });
 
