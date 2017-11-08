@@ -4,7 +4,7 @@ module Lunchplaner
       url 'http://torgetvallastaden.se/'
 
       def daily
-        data[:daily].gsub(/ ,/, ',')
+        [data[:daily].gsub(/ ,/, ',')]
       end
 
       def weekly

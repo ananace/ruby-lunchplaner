@@ -20,14 +20,26 @@ class Class
   end
 end
 
+set :public_folder, 'public'
+
 get '/' do
+  redirect '/index.html'
+end
+
+get '/api/all/?' do
   Lunchplaner.all.map do |obj|
     c = obj.delete(:source)
     [c.class.demodularized.underscore, obj]
   end.to_h.to_json
 end
 
-get '/:backend' do |backend|
+get '/api/names/?' do
+  Lunchplaner::Backends.constants.map do |c|
+    Lunchplaner::Backends.const_get(c).demodularized.underscore
+  end.to_json
+end
+
+get '/api/:backend/?' do |backend|
   b = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join('')).new
 
   {
@@ -35,7 +47,7 @@ get '/:backend' do |backend|
   }.to_json
 end
 
-get '/:backend/:method' do |backend, method|
+get '/api/:backend/:method/?' do |backend, method|
   raise "Invalid action '#{method}'" unless %i[url name daily weekly all].include?(method.to_s.to_sym)
 
   b = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join('')).new
