@@ -4,11 +4,16 @@ module Lunchplaner
       url 'http://torgetvallastaden.se/'
 
       def daily
-        [data[:daily].gsub(/ ,/, ',')]
+        [data[:daily].gsub(/ ,/, ',').gsub(/\s+/, ' ').strip]
       end
 
       def weekly
-        data[:weekly].map { |el| el.gsub(/ ,/, ',') }
+        data[:weekly].map do |el|
+          el.gsub(/ ,/, ',')
+            .gsub(/\s\d+:-/, '')
+            .gsub(/\s+/, ' ')
+            .strip
+        end
       end
 
       def to_s
@@ -46,12 +51,16 @@ module Lunchplaner
             next
           end
 
-          c = el.content.gsub(/\s\d+:-/, '').split("\n")
+          c = el.content.split("\n")
           if c.length > 1
             weekly << c[1]
           else
             weekly << c[0]
           end
+        end
+
+        if weekly.length <= 1
+          weekly += menu.last.children[1..-1].map(&:content).map(&:strip).reject(&:empty?)
         end
 
         { daily: daily, weekly: weekly }
