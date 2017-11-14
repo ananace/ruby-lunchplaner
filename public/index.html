@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <title>Lunchrestauranger, nära Linköpings universitet</title>
   </head>
   <body>
@@ -14,28 +15,29 @@
 
       <div class="card-columns my-2" id="menyer" v-else>
         <div v-for="(place, clean_name) in backends">
-          <div class="card my-2" v-bind:class="{ 'border-primary': hovered == clean_name }" v-bind:id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
-            <div class="card-header">
-              {{ place.name }}
+          <div class="card my-2" :class="{ 'border-primary': hovered == clean_name }" :id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
+            <div class="card-header d-flex w-100 justify-content-between">
+              <div>{{ place.name }}</div>
+
+              <div class="btn-group">
+                <a title="Se restaurangen på karta" class="btn btn-sm btn-outline-secondary disabled" :href="place.map_url" v-if="place.map_url"><i class="fa fa-map"></i></a>
+                <a title="Restaurangens sida" class="btn btn-sm btn-outline-primary" :href="place.url" v-if="place.url"><i class="fa fa-link"></i></a>
+              </div>
             </div>
             <div class="card-body">
               <h5 class="card-text" v-if="place.daily">Idag:</h5>
               <ul class="list-group list-group-flush" v-for="meal in place.daily" v-if="place.daily">
-                <li class="list-group-item">{{ meal }}</li>
+                <li class="list-group-item list-group-item-action">{{ meal }}</li>
               </ul>
 
               <h5 class="card-text mt-4" v-if="place.weekly">Denna vecka:</h5>
               <ul class="list-group list-group-flush" v-for="meal in place.weekly" v-if="place.weekly">
-                <li class="list-group-item">{{ meal }}</li>
+                <li class="list-group-item list-group-item-action">{{ meal }}</li>
               </ul>
 
               <div class="m-5" v-if="!place.daily && !place.weekly">
                 <h4 class="card-text">Loading...</h4>
               </div>
-
-              <p class="card-text mt-4" v-if="place.url">
-                <a class="btn btn-sm btn-primary" v-bind:href="place.url">Restaurangens sida</a>
-              </p>
             </div>
           </div>
         </div>
