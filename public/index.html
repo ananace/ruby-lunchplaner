@@ -17,10 +17,10 @@
         <div v-for="(place, clean_name) in backends">
           <div class="card my-2" :class="{ 'border-primary': hovered == clean_name }" :id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
             <div class="card-header d-flex w-100 justify-content-between">
-              <div>{{ place.name }}</div>
+              <div>{{ place.name || clean_name }}</div>
 
               <div class="btn-group">
-                <a title="Se restaurangen på karta" class="btn btn-sm btn-outline-secondary" :href="place.name | map_url" @click.prevent="openMapModal($event)"><i class="fa fa-map"></i></a>
+                <a title="Se restaurangen på karta" class="btn btn-sm btn-outline-secondary" :href="place.name | map_url" @click.prevent="openMapModal($event)" v-if="place.name"><i class="fa fa-map"></i></a>
                 <a title="Restaurangens sida" class="btn btn-sm btn-outline-primary" :href="place.url" v-if="place.url"><i class="fa fa-link"></i></a>
               </div>
             </div>
@@ -107,7 +107,7 @@
                         for (it in resp.data) {
                           let name = resp.data[it];
                           if (!App.backends[name]) {
-                            Vue.set(App.backends, name, { 'name': name });
+                            Vue.set(App.backends, name, {});
                           }
                         }
                       });
