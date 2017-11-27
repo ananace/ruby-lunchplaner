@@ -23,7 +23,7 @@ module Lunchplaner
       private
 
       def data
-        menu = raw_data.at_css('#meny').xpath('.//span')
+        menu = raw_data.at_css('#meny').xpath('.//p')
         daily = menu.find do |el|
           b = el.at_css('b')
           next unless b
@@ -51,10 +51,10 @@ module Lunchplaner
             next
           end
 
-          c = el.content.split("\n")
+          c = el.content.split("\n").reject { |e| e.length < 5 }
           if c.length > 1
-            weekly << c[1]
-          else
+            weekly += c
+          elsif c.length == 1
             weekly << c[0]
           end
         end
