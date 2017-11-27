@@ -44,10 +44,16 @@ module Lunchplaner
 
         found_weekly = false
         menu.each do |el|
+          puts "Iter; #{el.content.inspect}"
           if !found_weekly
             b = el.at_css('b')
             next if not b or !b.content.include?('Serveras hela dagen')
             found_weekly = true
+
+            c = el.content.gsub('Serveras hela dagen', '').split("\n").reject { |e| e.length < 5 }
+            if c.any?
+              weekly += c
+            end
             next
           end
 
