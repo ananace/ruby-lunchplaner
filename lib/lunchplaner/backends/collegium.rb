@@ -4,7 +4,7 @@ module Lunchplaner
       url 'http://collegium.kvartersmenyn.se/'
 
       def daily
-        data
+        data.empty? ? nil : data
       end
 
       private
