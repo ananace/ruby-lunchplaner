@@ -41,7 +41,7 @@ module Lunchplaner
     def raw_data
       cache.get_or_set("raw_data-#{self.class.name}", expires_in: 1 * 60 * 60) do
         puts "Refreshing cache for #{self.class.name}..."
-        Nokogiri::HTML(open(url))
+        Nokogiri::HTML(open(url, read_timeout: 15))
       end
     end
 
