@@ -20,7 +20,7 @@
               <div>{{ place.name || clean_name }}</div>
 
               <div class="btn-group">
-                <a title="Se restaurangen på karta" class="btn btn-sm btn-outline-secondary" :href="place.name | map_url" @click.prevent="openMapModal($event)" v-if="place.name"><i class="fa fa-map"></i></a>
+                <a title="Se restaurangen på karta" class="btn btn-sm btn-outline-secondary" href="#" :map-href="place.name | map_url" @click.prevent="openMapModal($event)" v-if="place.name"><i class="fa fa-map"></i></a>
                 <a title="Restaurangens sida" class="btn btn-sm btn-outline-primary" :href="place.url" v-if="place.url"><i class="fa fa-link"></i></a>
               </div>
             </div>
@@ -129,7 +129,7 @@
                     methods: {
                       openMapModal(event) {
                         var button = $(event.currentTarget);
-                        this.mapLink = button.prop('href');
+                        this.mapLink = button.prop('map-href');
 
                         $('#mapModal').modal('show');
                       }
