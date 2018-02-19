@@ -16,7 +16,7 @@ module Lunchplaner
             if e.empty?
               day = nil
             else
-              a << e
+              a << e unless %w[HAV GÅRD ÄNG SALLAD].include? e
             end
           elsif e.start_with? '<strong>'
             if (e.include?('Måndag') && Time.now.monday?)\
