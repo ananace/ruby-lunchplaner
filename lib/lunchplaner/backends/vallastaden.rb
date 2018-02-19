@@ -25,35 +25,30 @@ module Lunchplaner
       def data
         menu = raw_data.at_css('#meny').xpath('.//p')
         daily = menu.find do |el|
-          b = el.at_css('b')
-          next unless b
-          e = b.content
+          d = el.content.split("\n")
+          e = d.first
 
           (e.include?('Måndag') && Time.now.monday?)\
             || (e.include?('Tisdag') && Time.now.tuesday?)\
             || (e.include?('Onsdag') && Time.now.wednesday?)\
             || (e.include?('Torsdag') && Time.now.thursday?)\
             || (e.include?('Fredag') && Time.now.friday?)
-        end.content.split("\n")[1]
+        end
+        daily = daily.content.split("\n")[1] if daily
 
         weekly = [menu.find do |el|
-          b = el.at_css('b')
-          next unless b
-          b.content.include?('Veckans')
+          el.content.include?('Veckans')
         end.content.split("\n")[1]]
 
         found_weekly = false
         menu.each do |el|
-          puts "Iter; #{el.content.inspect}"
-          if !found_weekly
-            b = el.at_css('b')
-            next if not b or !b.content.include?('Serveras hela dagen')
+          unless found_weekly
+            b = el
+            next if !b || !b.content.include?('Serveras hela dagen')
             found_weekly = true
 
             c = el.content.gsub('Serveras hela dagen', '').split("\n").reject { |e| e.length < 5 }
-            if c.any?
-              weekly += c
-            end
+            weekly += c if c.any?
             next
           end
 
