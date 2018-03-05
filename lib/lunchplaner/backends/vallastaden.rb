@@ -23,7 +23,7 @@ module Lunchplaner
       private
 
       def data
-        menu = raw_data.at_css('#meny').xpath('.//p')
+        menu = raw_data.at_css('#meny').xpath('.//p[@class="p1"]')
         daily = menu.find do |el|
           d = el.content.split("\n")
           e = d.first
