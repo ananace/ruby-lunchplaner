@@ -28,7 +28,7 @@ end
 
 get '/api/?' do
   content_type :json
-  { _methods: [ '/api/all', '/api/names', '/api/:backend', '/api/:backend/:method' ] }.to_json
+  { _methods: %w[/api/all /api/names /api/:backend /api/:backend/:method] }.to_json
 end
 
 get '/api/all/?' do
@@ -50,7 +50,7 @@ get '/api/:backend/?' do |backend|
   content_type :json
   b = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join('')).new
 
-  b.all.merge(name: b.to_s, url: b.url, _methods: [ 'url', 'name', 'daily', 'weekly', 'all' ].map{|m| "/api/#{backend}/#{m}"}).to_json
+  b.all.merge(name: b.to_s, url: b.url, _methods: %w[url name daily weekly all].map { |m| "/api/#{backend}/#{m}" }).to_json
 end
 
 get '/api/:backend/:method/?' do |backend, method|
