@@ -15,7 +15,7 @@
 
       <div class="card-columns my-2" id="menyer" v-else>
         <div v-for="(place, clean_name) in backends">
-          <div class="card my-2" :class="{ 'border-primary': hovered == clean_name }" :id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
+          <div class="card my-2" :class="{ 'border-primary': hovered == clean_name, 'border-danger': place.error }" :id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
             <div class="card-header d-flex w-100 justify-content-between">
               <div>{{ place.name || clean_name }}</div>
 
@@ -35,7 +35,10 @@
                 <li class="list-group-item list-group-item-action border-0 rounded">{{ meal }}</li>
               </ul>
 
-              <div class="m-5" v-if="!place.daily && !place.weekly">
+              <div class="text-center" v-if="place.error"><h5>{{ place.error.toString() }}</h5></div>
+              <div class="error-summary mt-3" v-if="place.summary" v-html="place.summary"></div>
+
+              <div class="m-5" v-if="!place.error && !place.daily && !place.weekly">
                 <h4 class="card-text">Loading...</h4>
               </div>
             </div>
@@ -70,6 +73,19 @@
 
       [v-cloak] {
         display: none;
+      }
+
+      .error-summary {
+        font-size: 0.75rem;
+      }
+
+      .error-summary > h1 {
+        font-size: 1rem;
+      }
+      
+      .error-summary > h2 {
+        font-size: 0.9rem;
+        margin-top: -5px;
       }
 
       @media (min-width: 576px) {
@@ -111,14 +127,14 @@
                           }
                         }
 
-                        axios.get('/api/all', { timeout: 1000 }).then(function(resp) {
+                        axios.get('/api/all', { timeout: 2500 }).then(function(resp) {
                           App.backends = Object.assign({}, resp.data);
                         }).catch(function(error) {
                           $.each(App.backends, function(backend, _obj) {
                             axios.get('/api/' + backend).then(function(resp) {
                               Vue.set(App.backends, backend, Object.assign({}, resp.data));
                             }).catch(function(error) {
-                              Vue.set(App.backends, backend, { name: App.backends[backend].name, daily: [] });
+                              Vue.set(App.backends, backend, { name: App.backends[backend].name, error: error, summary: $(error.response.data).find('#summary').html() });
                             });
                           });
                         });
