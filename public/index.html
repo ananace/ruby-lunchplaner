@@ -110,10 +110,18 @@
                             Vue.set(App.backends, name, {});
                           }
                         }
-                      });
 
-                      axios.get('/api/all').then(function(resp) {
-                        App.backends = Object.assign({}, resp.data);
+                        axios.get('/api/all', { timeout: 1000 }).then(function(resp) {
+                          App.backends = Object.assign({}, resp.data);
+                        }).catch(function(error) {
+                          $.each(App.backends, function(backend, _obj) {
+                            axios.get('/api/' + backend).then(function(resp) {
+                              Vue.set(App.backends, backend, Object.assign({}, resp.data));
+                            }).catch(function(error) {
+                              Vue.set(App.backends, backend, { name: App.backends[backend].name, daily: [] });
+                            });
+                          });
+                        });
                       });
 
                       $('#mapModal').modal({ show: false });
