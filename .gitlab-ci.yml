@@ -20,12 +20,13 @@ rubocop:
 #   - rspec spec
 
 push image:
+  stage: deploy
   when: manual
   script:
   - make publish
 
 deploy:
-  type: deploy
+  stage: deploy
   environment: production
   when: manual
   script:
