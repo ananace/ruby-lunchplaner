@@ -24,6 +24,8 @@ rubocop:
 push image:
   stage: deploy
   when: manual
+  image: docker:dind
+  before_script: []
   script:
     - make publish
 
@@ -31,5 +33,12 @@ deploy:
   stage: deploy
   environment: production
   when: manual
+  image: lachlanevenson/k8s-kubectl
+  before_script: []
   script:
-    - make deploy
+    - PREVID=$(kubectl get pods -l "app=lunch" -o name)
+    - echo "Prev: ${PREVID}"
+    - kubectl scale --replicas=2 deployment lunchplaner
+    - while [ $(kubectl get pods -l "app=lunch" -o custom-columns=name:metadata.name,status:status.phase | tail -n+2 | grep Running | wc -l) -lt 2 ]; do sleep 5; done
+    - kubectl delete ${PREVID}
+    - kubectl scale --replicas=1 deployment lunchplaner

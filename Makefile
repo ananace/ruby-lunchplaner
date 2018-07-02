@@ -6,7 +6,7 @@ image:
 publish: image
 	docker push gitlab.it.liu.se:5000/aleol57/lunchplaner
 
-deploy: publish
+deploy:
 	$(eval PREVID := $(shell kubectl get pods -l "app=lunch" -o name))
 	echo "Prev: $(PREVID)"
 	kubectl scale --replicas=2 deployment lunchplaner

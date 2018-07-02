@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['alexander.olofsson@liu.se']
 
   spec.summary       = 'Ta hand om lunchplanerna'
-  spec.description   = 'Slår upp och listar alla tillgängliga luncher för dagen.'
+  spec.description   = 'Listar alla lunchresturanger vid LiU.'
   spec.homepage      = 'http://gitlab.liu.se/aleol57/lunchplaner'
   spec.license       = 'MIT'
 
