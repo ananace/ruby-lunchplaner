@@ -6,18 +6,28 @@ cache:
   paths:
     - vendor/ruby
 
-before_script:
-  - ruby -v
-  - gem install bundler  --no-ri --no-rdoc
-  - bundle install -j $(nproc) --path vendor
+stages:
+  - setup
+  - test
+  - deploy
+
+setup:
+  stage: setup
+  script:
+    - gem install bundler  --no-ri --no-rdoc
+    - bundle install -j $(nproc) --path vendor
 
 rubocop:
+  stage: test
   cache:
     policy: pull
   script:
-  - bundle exec rubocop
+    - bundle exec rubocop
 
 # rspec:
+#   stage: test
+#   cache:
+#     policy: pull
 #   script:
 #   - rspec spec
 
@@ -25,11 +35,11 @@ push image:
   stage: deploy
   when: manual
   script:
-  - make publish
+    - make publish
 
 deploy:
   stage: deploy
   environment: production
   when: manual
   script:
-  - make deploy
+    - make deploy
