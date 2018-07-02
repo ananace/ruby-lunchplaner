@@ -40,7 +40,7 @@ deploy:
     - echo "Prev: ${PREVID}"
     - kubectl scale --replicas=2 deployment lunchplaner
     - sleep 1
-    - while [ $(kubectl get pods -l "app=lunch" -o custom-columns=name:metadata.name,status:status.phase | tail -n+2 | grep Running | wc -l) -lt 2 ]; do sleep 5; done
+    - 'while [ $(kubectl get pods -l "app=lunch" -o custom-columns=name:metadata.name,status:status.phase | tail -n+2 | grep Running | wc -l) -lt 2 ]; do sleep 5; done'
     - kubectl delete ${PREVID}
     - sleep 1
     - kubectl scale --replicas=1 deployment lunchplaner
