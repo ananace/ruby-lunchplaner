@@ -12,8 +12,10 @@ before_script:
   - bundle install -j $(nproc) --path vendor
 
 rubocop:
+  cache:
+    policy: pull
   script:
-  - rubocop
+  - bundle exec rubocop
 
 # rspec:
 #   script:
