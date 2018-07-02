@@ -1,0 +1,31 @@
+image: "ruby:2.4"
+
+# Cache gems in between builds
+cache:
+  paths:
+    - vendor/ruby
+
+before_script:
+  - ruby -v
+  - gem install bundler  --no-ri --no-rdoc
+  - bundle install -j $(nproc) --path vendor
+
+rubocop:
+  script:
+  - rubocop
+
+rspec:
+  script:
+  - rspec spec
+
+push image:
+  when: manual
+  script:
+  - make publish
+
+deploy:
+  type: deploy
+  environment: production
+  when: manual
+  script:
+  - make deploy
