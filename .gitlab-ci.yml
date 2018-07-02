@@ -1,3 +1,4 @@
+---
 image: "ruby:2.4"
 
 # Cache gems in between builds
@@ -14,9 +15,9 @@ rubocop:
   script:
   - rubocop
 
-rspec:
-  script:
-  - rspec spec
+# rspec:
+#   script:
+#   - rspec spec
 
 push image:
   when: manual

@@ -60,9 +60,7 @@ module Lunchplaner
           end
         end
 
-        if weekly.length <= 1
-          weekly += menu.last.children[1..-1].map(&:content).map(&:strip).reject(&:empty?)
-        end
+        weekly += menu.last.children[1..-1].map(&:content).map(&:strip).reject(&:empty?) if weekly.length <= 1
 
         { daily: daily, weekly: weekly }
       end

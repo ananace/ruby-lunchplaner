@@ -5,7 +5,7 @@ module Lunchplaner
 
       def daily
         data.take_while do |e|
-          !(e =~ /(FISK|INDISK|VEG|GRILL)/)
+          (e !~ /(FISK|INDISK|VEG|GRILL)/)
         end.map do |e|
           e.gsub(/[0-9A-Z]\. ?/, '')
         end.map do |e|
@@ -17,10 +17,10 @@ module Lunchplaner
 
       def weekly
         data.drop_while do |e|
-          !(e =~ /(FISK|INDISK|VEG|GRILL)/)
+          (e !~ /(FISK|INDISK|VEG|GRILL)/)
         end.map do |e|
           e.gsub(/([0-9A-Z]\. ?|[^;]+(\s\d+)?: |\t)/, '').split(';')
-        end.flatten.select do |e| 
+        end.flatten.select do |e|
           e.length > 2
         end.map do |e|
           e[0].upcase + e[1..-1]

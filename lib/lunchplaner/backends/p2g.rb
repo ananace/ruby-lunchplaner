@@ -16,7 +16,7 @@ module Lunchplaner
       def data
         raw_data.at_css('.wpb_wrapper h3').parent.css('p').map do |e|
           e.content.strip
-        end.select { |d| !d.empty? }
+        end.reject(&:empty?)
       end
     end
   end

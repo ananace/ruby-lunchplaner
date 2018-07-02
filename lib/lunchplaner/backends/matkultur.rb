@@ -16,7 +16,7 @@ module Lunchplaner
       def data
         day = nil
         week = nil
-        raw_data.at_css('#site-main tr td:nth-of-type(2)').children.select{|c| c.name == 'p'}.each_with_object({}) do |e, h|
+        raw_data.at_css('#site-main tr td:nth-of-type(2)').children.select { |c| c.name == 'p' }.each_with_object({}) do |e, h|
           if day
             h[:daily] = [e.content]
             day = nil
