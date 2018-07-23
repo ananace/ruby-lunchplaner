@@ -4,6 +4,9 @@ require 'lunchplaner'
 require 'sinatra'
 require 'psych'
 
+require 'prometheus/middleware/collector'
+require 'prometheus/middleware/exporter'
+
 class String
   def underscore
     gsub(/::/, '/')
@@ -19,6 +22,9 @@ class Class
     name.split('::').last
   end
 end
+
+use Prometheus::Middleware::Collector
+use Prometheus::Middleware::Exporter
 
 set :public_folder, 'public'
 
