@@ -1,7 +1,7 @@
 module Lunchplaner
   module Backends
     class P2g < Lunchplaner::Backend
-      url 'http://p2catering.se/'
+      url 'https://p2catering.se/'
 
       def daily
         data
