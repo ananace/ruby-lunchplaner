@@ -13,6 +13,7 @@ module Lunchplaner
   module Backends
     autoload :ChiliLime,           'lunchplaner/backends/chililime'
     autoload :Collegium,           'lunchplaner/backends/collegium'
+    autoload :Husman,              'lunchplaner/backends/husman'
     autoload :Matkultur,           'lunchplaner/backends/matkultur'
     autoload :P2g,                 'lunchplaner/backends/p2g'
     autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben'
