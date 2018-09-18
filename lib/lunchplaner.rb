@@ -16,7 +16,6 @@ module Lunchplaner
     autoload :Matkultur,           'lunchplaner/backends/matkultur'
     autoload :P2g,                 'lunchplaner/backends/p2g'
     autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben'
-    autoload :Vallastaden,         'lunchplaner/backends/vallastaden'
     autoload :Zenit,               'lunchplaner/backends/zenit'
   end
 end
