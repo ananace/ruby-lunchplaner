@@ -8,7 +8,7 @@ cache:
 
 rubocop:
   script:
-    - gem install rubocop --no-ri --no-rdoc
+    - gem install rubocop -N
     - rubocop
 
 # rspec:
