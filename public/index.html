@@ -127,15 +127,11 @@
                           }
                         }
 
-                        axios.get('/api/all', { timeout: 2500 }).then(function(resp) {
-                          App.backends = Object.assign({}, resp.data);
-                        }).catch(function(error) {
-                          $.each(App.backends, function(backend, _obj) {
-                            axios.get('/api/' + backend).then(function(resp) {
-                              Vue.set(App.backends, backend, Object.assign({}, resp.data));
-                            }).catch(function(error) {
-                              Vue.set(App.backends, backend, { name: App.backends[backend].name, error: error, summary: $(error.response.data).find('#summary').html() });
-                            });
+                        $.each(App.backends, function(backend, _obj) {
+                          axios.get('/api/' + backend).then(function(resp) {
+                            Vue.set(App.backends, backend, Object.assign({}, resp.data));
+                          }).catch(function(error) {
+                            Vue.set(App.backends, backend, { name: App.backends[backend].name, error: error, summary: $(error.response.data).find('#summary').html() });
                           });
                         });
                       });
