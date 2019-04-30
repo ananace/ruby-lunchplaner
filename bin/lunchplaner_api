@@ -23,6 +23,8 @@ class Class
   end
 end
 
+backends = Lunchplaner::Backends.constants.map { |c| Lunchplaner::Backends.const_get(c).new }
+
 use Prometheus::Middleware::Collector
 use Prometheus::Middleware::Exporter
 
@@ -54,7 +56,8 @@ end
 
 get '/api/:backend/?' do |backend|
   content_type :json
-  b = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join('')).new
+  klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join(''))
+  b = backends.find { |k| k.class == klass }
 
   b.all.merge(name: b.to_s, url: b.url, _methods: %w[url name daily weekly all].map { |m| "/api/#{backend}/#{m}" }).to_json
 end
@@ -63,7 +66,7 @@ get '/api/:backend/:method/?' do |backend, method|
   content_type :json
   raise "Invalid action '#{method}'" unless %i[url name daily weekly all].include?(method.to_s.to_sym)
 
-  b = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join('')).new
-
+  klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join(''))
+  b = backends.find { |k| k.class == klass }
   b.send(method.to_s.to_sym).to_json
 end
