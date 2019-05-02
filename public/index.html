@@ -119,17 +119,19 @@
                     },
 
                     created() {
-                      axios.get('/api/names').then(function(resp) {
+                      var namepromise = axios.get('/api/names').then(function(resp) {
                         for (it in resp.data) {
                           let name = resp.data[it];
                           if (!App.backends[name]) {
                             Vue.set(App.backends, name, {});
                           }
                         }
+                      });
 
-                        axios.get('/api/all', { timeout: 250}).then(function(resp) {
-                          App.backends = Object.assign({}, resp.data);
-                        }).catch(function(ex) {
+                      axios.get('/api/all', { timeout: 750}).then(function(resp) {
+                        App.backends = Object.assign({}, resp.data);
+                      }).catch(function(ex) {
+                        namepromise.then(function() {
                           $.each(App.backends, function(backend, _obj) {
                             axios.get('/api/' + backend).then(function(resp) {
                               Vue.set(App.backends, backend, Object.assign({}, resp.data));
