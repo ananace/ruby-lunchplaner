@@ -17,6 +17,6 @@ module Lunchplaner
     autoload :Matkultur,           'lunchplaner/backends/matkultur'
     autoload :P2g,                 'lunchplaner/backends/p2g'
     autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben'
-    autoload :Zenit,               'lunchplaner/backends/zenit'
+    # autoload :Zenit,               'lunchplaner/backends/zenit'
   end
 end
