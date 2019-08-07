@@ -21,12 +21,11 @@ rubocop:
 #   script:
 #     - rspec spec
 
-push image:
+deploy:image:
   stage: deploy
-  when: manual
   image:
     name: gcr.io/kaniko-project/executor:debug
-    entrypoint: ["/busybox/sh", "-c"]  # For Docker <= 17.03
+    entrypoint: []
   script:
     - mkdir -p /root/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_JOB_TOKEN\"}}}" > /root/.docker/config.json
@@ -139,6 +138,7 @@ push image:
 
 .stop:environment:
   stage: deploy
+  when: manual
   image: lachlanevenson/k8s-kubectl
   before_script: []
   script:
