@@ -136,8 +136,6 @@ push image:
       EOF
   variables:
     GIT_STRATEGY: none
-  only:
-    - master
 
 .stop:environment:
   stage: deploy
@@ -154,8 +152,11 @@ deploy:production:
   environment:
     name: production
     on_stop: stop:production
+  only:
+    - master
 
 stop:production:
   extends: .stop:environment
   environment:
     name: production
+    action: stop
