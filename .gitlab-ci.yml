@@ -34,21 +34,125 @@ push image:
   only:
     - master
 
-deploy:
+
+.start:environment:
   stage: deploy
-  environment: production
+  environment:
+    on_stop: stop:environment
   when: manual
   image: lachlanevenson/k8s-kubectl
   before_script: []
   script:
-    - kubectl label deployment lunchplaner app=$CI_ENVIRONMENT_SLUG --overwrite
-    - 'export PREVID=$(kubectl get pods -l "app=$CI_ENVIRONMENT_SLUG" -o name)'
-    - 'echo "Prev: ${PREVID}"'
-    - 'kubectl scale --replicas=2 deployment lunchplaner'
-    - 'sleep 1'
-    - 'while [ $(kubectl get pods -l "app=$CI_ENVIRONMENT_SLUG" -o custom-columns=name:metadata.name,status:status.phase | tail -n+2 | grep Running | wc -l) -lt 2 ]; do sleep 5; done'
-    - 'kubectl delete ${PREVID}'
-    - 'sleep 1'
-    - 'kubectl scale --replicas=1 deployment lunchplaner'
+    - |
+      # Deploy environment with kubectl apply
+
+      kubectl apply -f - <<EOF
+      ---
+      apiVersion: extensions/v1beta1
+      kind: Deployment
+      metadata:
+        annotations:
+          se.liu.gitlab/commit: $CI_COMMIT_SHA
+        labels:
+          app: lunchplaner
+          environment: $CI_ENVIRONMENT_SLUG
+        name: ${CI_ENVIRONMENT_SLUG}-lunchplaner
+      spec:
+        replicas: 1
+        revisionHistoryLimit: 1
+        selector:
+          matchLabels:
+            app: lunchplaner
+            environment: $CI_ENVIRONMENT_SLUG
+        template:
+          metadata:
+            annotations:
+              prometheus.io/port: "4567"
+              prometheus.io/scrape: "true"
+            labels:
+              app: lunchplaner
+              environment: $CI_ENVIRONMENT_SLUG
+          spec:
+            containers:
+            - env:
+              - name: http_proxy
+                value: http://squid-proxy.kube-system.svc:3128/
+              - name: https_proxy
+                value: http://squid-proxy.kube-system.svc:3128/
+              image: $CI_REGISTRY_IMAGE
+              imagePullPolicy: Always
+              name: lunchplaner
+              ports:
+              - containerPort: 4567
+                protocol: TCP
+              readinessProbe:
+                tcpSocket:
+                  port: 4567
+              resources:
+                limits:
+                  cpu: 100m
+                  memory: 80Mi
+                requests:
+                  cpu: 15m
+                  memory: 42Mi
+      ---
+      apiVersion: v1
+      kind: Service
+      metadata:
+        labels:
+          app: lunchplaner
+          environment: $CI_ENVIRONMENT_SLUG
+        name: ${CI_ENVIRONMENT_SLUG}-lunchplaner
+      spec:
+        ports:
+        - name: web
+          port: 80
+          protocol: TCP
+          targetPort: 4567
+        selector:
+          app: lunchplaner
+          environment: $CI_ENVIRONMENT_SLUG
+        type: ClusterIP
+      EOF
+    - |
+      # Deploy production ingress only on the production environment
+
+      [ "$CI_ENVIRONMENT_SLUG" == "production" ] && kubectl apply -f - <<EOF || true
+      ---
+      apiVersion: extensions/v1beta1
+      kind: Ingress
+      metadata:
+        name: ${CI_ENVIRONMENT_SLUG}-lunchplaner
+        labels:
+          app: lunchplaner
+          environment: $CI_ENVIRONMENT_SLUG
+      spec:
+        rules:
+        - host: lunch.kubernetes.it.liu.se
+          http:
+            paths:
+            - backend:
+                serviceName: ${CI_ENVIRONMENT_SLUG}-lunchplaner
+                servicePort: 4567
+              path: /
+      EOF
+  variables:
+    GIT_STRATEGY: none
   only:
     - master
+
+stop:environment:
+  stage: deploy
+  image: lachlanevenson/k8s-kubectl
+  before_script: []
+  script:
+    - kubectl delete deploy ${CI_ENVIRONMENT_SLUG}-lunchplaner
+  variables:
+    GIT_STRATEGY: none
+
+
+deploy:production:
+  extends: .start:environment
+  environment:
+    name: production
+    on_stop: stop:environment
