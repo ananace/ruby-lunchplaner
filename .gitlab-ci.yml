@@ -37,8 +37,6 @@ push image:
 
 .start:environment:
   stage: deploy
-  environment:
-    on_stop: stop:environment
   when: manual
   image: lachlanevenson/k8s-kubectl
   before_script: []
@@ -141,7 +139,7 @@ push image:
   only:
     - master
 
-stop:environment:
+.stop:environment:
   stage: deploy
   image: lachlanevenson/k8s-kubectl
   before_script: []
@@ -155,4 +153,9 @@ deploy:production:
   extends: .start:environment
   environment:
     name: production
-    on_stop: stop:environment
+    on_stop: stop:production
+
+stop:production:
+  extends: .stop:environment
+  environment:
+    name: production
