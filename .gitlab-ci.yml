@@ -37,7 +37,7 @@ deploy:image:
 .start:environment:
   stage: deploy
   when: manual
-  image: lachlanevenson/k8s-kubectl
+  image: boxboat/kubectl
   before_script: []
   script:
     - |
@@ -143,7 +143,7 @@ deploy:image:
 .stop:environment:
   stage: deploy
   when: manual
-  image: lachlanevenson/k8s-kubectl
+  image: boxboat/kubectl
   before_script: []
   script:
     - kubectl delete deploy ${CI_ENVIRONMENT_SLUG}-lunchplaner
