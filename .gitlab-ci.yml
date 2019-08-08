@@ -147,6 +147,9 @@ deploy:image:
   before_script: []
   script:
     - kubectl delete deploy ${CI_ENVIRONMENT_SLUG}-lunchplaner
+    - kubectl delete svc ${CI_ENVIRONMENT_SLUG}-lunchplaner
+    # Only exists on production environment, so failed deletion is not an error
+    - kubectl delete ingress ${CI_ENVIRONMENT_SLUG}-lunchplaner || true
   variables:
     GIT_STRATEGY: none
 
