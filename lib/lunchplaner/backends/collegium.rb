@@ -16,15 +16,11 @@ module Lunchplaner
         raw_data.at_css('.column_page').css('p').each do |e|
           e = e.text
           if %w[måndag tisdag onsdag torsdag fredag].include? e.strip.downcase
-            if (e.include?('Måndag') && Time.now.monday?)\
-              || (e.include?('Tisdag') && Time.now.tuesday?)\
-              || (e.include?('Onsdag') && Time.now.wednesday?)\
-              || (e.include?('Torsdag') && Time.now.thursday?)\
-              || (e.include?('Fredag') && Time.now.friday?)
-              day = true
-            else
-              day = false
-            end
+            day = (e.include?('Måndag') && Time.now.monday?)\
+               || (e.include?('Tisdag') && Time.now.tuesday?)\
+               || (e.include?('Onsdag') && Time.now.wednesday?)\
+               || (e.include?('Torsdag') && Time.now.thursday?)\
+               || (e.include?('Fredag') && Time.now.friday?)
 
             result << cur.join(' ') unless cur.empty?
             cur = []

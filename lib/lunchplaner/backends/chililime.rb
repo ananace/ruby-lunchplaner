@@ -5,7 +5,7 @@ module Lunchplaner
 
       def links
         [
-          { href: "http://chili-lime.se/helaveckan.asp", type: 'calendar', colour: 'primary', title: 'Hela veckans meny' }
+          { href: 'http://chili-lime.se/helaveckan.asp', type: 'calendar', colour: 'primary', title: 'Hela veckans meny' }
         ] + super
       end
 
