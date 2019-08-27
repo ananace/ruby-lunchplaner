@@ -46,21 +46,6 @@
         </div>
       </div>
 
-      <div class="modal fade" id="mapModal" tapindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-body">
-              <div class="embed-responsive embed-responsive-4by3">
-                <iframe class="embed-responsive-item" :src="mapLink" width="800" height="600" v-if="mapLink"></iframe>
-                <div style="text-center" v-else>
-                  Nothing here
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="position-static text-center" id="footer">
         <p class="text-muted font-weight-light">Projektet kan återfinnas på <a href="https://gitlab.liu.se/aleol57/lunchplaner">GitLab</a>, skapa ärenden där för tilläggning av fler restauranger.</p>
       </div>
@@ -103,7 +88,6 @@
     <script src="//unpkg.com/vue/dist/vue.min.js"></script>
     <script src="//unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
     <script>
@@ -141,24 +125,6 @@
                           });
                         });
                       });
-
-                      $('#mapModal').modal({ show: false });
-                    },
-
-                    filters: {
-                      map_url(value) {
-                        const clean_value = value.replace(/[^A-Za-z0-9 ]/g, '').replace(/  /g, ' ').replace(/ /g, '+');
-                        return "https://www.google.com/maps/embed/v1/place?key=AIzaSyAuEsY-Uq5tcZCKvnezliko3UsRUBJYCAo&q=" + clean_value + ",Linköping";
-                      }
-                    },
-
-                    methods: {
-                      openMapModal(event) {
-                        var button = $(event.currentTarget);
-                        App.mapLink = button.prop('map-href');
-
-                        $('#mapModal').modal('show');
-                      }
                     }
       });
     </script>
