@@ -24,11 +24,11 @@ module Lunchplaner
           if e.name == 'h3'
             at_day = false
 
-            if e.content.strip == 'Måndag' && Time.now.monday? ||
-               e.content.strip == 'Tisdag' && Time.now.tuesday? ||
-               e.content.strip == 'Onsdag' && Time.now.wednesday? ||
-               e.content.strip == 'Torsdag' && Time.now.thursday? ||
-               e.content.strip == 'Fredag' && Time.now.friday?
+            if e.text.strip.include?('Måndag') && Time.now.monday? ||
+               e.text.strip.include?('Tisdag') && Time.now.tuesday? ||
+               e.text.strip.include?('Onsdag') && Time.now.wednesday? ||
+               e.text.strip.include?('Torsdag') && Time.now.thursday? ||
+               e.text.strip.include?('Fredag') && Time.now.friday?
               at_day = true
             end
           elsif at_day && e.name == 'p'
