@@ -1,3 +1,4 @@
+require 'cgi'
 require 'mini_cache'
 require 'nokogiri'
 require 'open-uri'
@@ -10,6 +11,13 @@ module Lunchplaner
 
     def url
       self.class.url
+    end
+
+    def links
+      [
+        { href: url, type: 'link', colour: 'primary', title: 'Restaurangens sida' },
+        { href: "https://www.google.com/maps/search/#{CGI.escape("#{name}, Linköping")}", type: 'map', colour: 'secondary', title: 'Se restaurangen på karta' }
+      ]
     end
 
     def daily

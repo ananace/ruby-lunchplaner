@@ -5,7 +5,7 @@ module Lunchplaner
   def self.all
     Backends.constants.map do |r|
       obj = Backends.const_get(r).new
-      (obj.all rescue { daily: ['N/A'], weekly: ['N/A'] }).merge(source: obj, name: obj.to_s, url: obj.url)
+      (obj.all rescue { daily: ['N/A'], weekly: ['N/A'] }).merge(source: obj, name: obj.to_s, url: obj.url, links: obj.links)
     end
   end
 

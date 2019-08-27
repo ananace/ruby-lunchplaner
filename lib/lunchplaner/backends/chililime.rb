@@ -3,6 +3,12 @@ module Lunchplaner
     class ChiliLime < Lunchplaner::Backend
       url 'http://chili-lime.se/'
 
+      def links
+        [
+          { href: "http://chili-lime.se/helaveckan.asp", type: 'calendar', colour: 'primary', title: 'Hela veckans meny' }
+        ] + super
+      end
+
       def daily
         data.take_while do |e|
           (e !~ /(FISK|INDISK|VEG|GRILL)/)

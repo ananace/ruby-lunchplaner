@@ -19,9 +19,8 @@
             <div class="card-header d-flex w-100 justify-content-between">
               <div>{{ place.name || clean_name }}</div>
 
-              <div class="btn-group">
-                <a title="Se restaurangen på karta" class="btn btn-sm btn-outline-secondary" href="#" :map-href="place.name | map_url" @click.prevent="openMapModal($event)" v-if="place.name"><i class="fa fa-map"></i></a>
-                <a title="Restaurangens sida" class="btn btn-sm btn-outline-primary" :href="place.url" v-if="place.url"><i class="fa fa-link"></i></a>
+              <div class="btn-group" v-if="place.links">
+                <a v-for="(link) in place.links.slice().reverse()" :title="link.title" :class="['btn', 'btn-sm', 'btn-outline-' + (link.colour || 'primary')]" :href="link.href" :target="link.target || '_blank'"><i :class="['fa', 'fa-' + (link.type || 'link')]"></i></a>
               </div>
             </div>
             <div class="card-body">
