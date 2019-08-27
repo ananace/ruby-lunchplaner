@@ -39,6 +39,8 @@ deploy:image:
   when: manual
   image: boxboat/kubectl
   before_script: []
+  needs:
+    - deploy:image
   script:
     - |
       # Deploy environment with kubectl apply
