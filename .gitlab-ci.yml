@@ -1,4 +1,9 @@
 ---
+stages:
+  - test
+  - push
+  - deploy
+
 image: "ruby:2.4"
 
 # Cache gems in between builds
@@ -7,6 +12,7 @@ cache:
     - vendor/ruby
 
 rubocop:
+  stage: test
   script:
     - gem install rubocop -N
     - rubocop
@@ -21,8 +27,8 @@ rubocop:
 #   script:
 #     - rspec spec
 
-deploy:image:
-  stage: deploy
+push:image:
+  stage: push
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: []
@@ -39,8 +45,6 @@ deploy:image:
   when: manual
   image: boxboat/kubectl
   before_script: []
-  needs:
-    - deploy:image
   script:
     - |
       # Deploy environment with kubectl apply
