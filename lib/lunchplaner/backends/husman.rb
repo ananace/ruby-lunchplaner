@@ -4,9 +4,14 @@ module Lunchplaner
       url 'https://restauranghusman.se'
 
       def links
-        weeknum = Time.now.strftime('%W').to_i + 1
+        # The official download URL scheme; (The restaurant doesn't always follow it)
+        # weeknum = Time.now.strftime('%W').to_i + 1
+        # weekly_url = "https://restauranghusman.se/wp-content/uploads/#{Time.now.strftime "%Y/%m/#{weeknum}-%y"}.pdf"
+        
+        weekly_url = data.css('a.btn').first['href']
+
         [
-          { href: "https://restauranghusman.se/wp-content/uploads/#{Time.now.strftime "%Y/%m/#{weeknum}-%y"}.pdf", type: 'file-pdf-o', colour: 'primary', title: 'Hela veckans meny' }
+          { href: weekly_url, type: 'file-pdf-o', colour: 'primary', title: 'Hela veckans meny' }
         ] + super
       end
 
