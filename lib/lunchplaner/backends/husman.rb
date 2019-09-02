@@ -7,7 +7,7 @@ module Lunchplaner
         # The official download URL scheme; (The restaurant doesn't always follow it)
         # weeknum = Time.now.strftime('%W').to_i + 1
         # weekly_url = "https://restauranghusman.se/wp-content/uploads/#{Time.now.strftime "%Y/%m/#{weeknum}-%y"}.pdf"
-        
+
         weekly_url = data.css('a.btn').first['href']
 
         [
