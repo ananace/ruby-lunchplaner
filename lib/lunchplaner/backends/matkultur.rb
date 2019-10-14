@@ -1,7 +1,7 @@
 module Lunchplaner
   module Backends
     class Matkultur < Lunchplaner::Backend
-      url 'http://www.matkultur.net/'
+      url 'https://www.matkultur.net/Veckans-meny.html'
 
       def daily
         data[:daily]
@@ -16,7 +16,9 @@ module Lunchplaner
       def data
         day = nil
         week = nil
-        raw_data.at_css('#site-main tr td:nth-of-type(2)').children.select { |c| c.name == 'p' }.each_with_object({}) do |e, h|
+        raw_data.at_css('.__columns div[data-col=7] .block-section .block-section-container').css('h6, p').each_with_object({}) do |e, h|
+          next if e.content.strip.empty?
+
           if day
             h[:daily] = [e.content]
             day = nil
