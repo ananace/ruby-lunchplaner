@@ -5,6 +5,8 @@ require 'open-uri'
 
 module Lunchplaner
   class Backend
+    WEEKDAYS = %w[Söndag Måndag Tisdag Onsdag Torsdag Fredag Lördag Söndag].freeze
+
     def self.url(url = nil)
       @url ||= url
     end

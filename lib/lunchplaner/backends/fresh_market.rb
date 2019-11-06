@@ -26,7 +26,12 @@ module Lunchplaner
              || (e.content.start_with?('Onsdag') && Time.now.wednesday?) \
              || (e.content.start_with?('Torsdag') && Time.now.thursday?) \
              || (e.content.start_with?('Fredag') && Time.now.friday?)
-            return e.content.gsub(/^(Måndag|Tisdag|Onsdag|Torsdag|Fredag)|[\u202f\u00a0]/, '')
+            curday = WEEKDAYS[Time.now.wday]
+
+            return e.content
+              .gsub(/^.*#{curday}/, '')
+              .split(/Måndag|Tisdag|Onsdag|Torsdag|Fredag/).first
+              .gsub(/[\u202f\u00a0]/, '')
           end
         end
       end
