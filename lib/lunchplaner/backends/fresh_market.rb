@@ -29,9 +29,9 @@ module Lunchplaner
             curday = WEEKDAYS[Time.now.wday]
 
             return e.content
-              .gsub(/^.*#{curday}/, '')
-              .split(/Måndag|Tisdag|Onsdag|Torsdag|Fredag/).first
-              .gsub(/[\u202f\u00a0]/, '')
+                    .gsub(/^.*#{curday}/, '')
+                    .split(/Måndag|Tisdag|Onsdag|Torsdag|Fredag/).first
+                    .gsub(/[\u202f\u00a0]/, '')
           end
         end
       end
