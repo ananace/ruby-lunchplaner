@@ -42,7 +42,6 @@ push:image:
 
 .start:environment:
   stage: deploy
-  when: manual
   image: boxboat/kubectl
   before_script: []
   script:
