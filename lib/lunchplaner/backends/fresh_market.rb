@@ -23,10 +23,10 @@ module Lunchplaner
           if !in_week
             in_week = true if e.content.end_with? weeknum.to_s
           elsif e.content.include?(curday)
-            return e.content
-                    .gsub(/^.*#{curday}/, '')
-                    .split(/Måndag|Tisdag|Onsdag|Torsdag|Fredag/).first
-                    .gsub(/[\u202f\u00a0]/, '')
+            return e.inner_html
+                    .gsub(%r{<br/?>}, "\n")
+                    .split("\n")
+                    .last
           end
         end
       end
