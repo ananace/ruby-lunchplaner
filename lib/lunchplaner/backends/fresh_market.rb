@@ -27,6 +27,9 @@ module Lunchplaner
                     .gsub(%r{<br/?>}, "\n")
                     .split("\n")
                     .last
+                    .gsub(/Måndag|Tisdag|Onsdag|Torsdag|Fredag/, '')
+                    .gsub(%r{<[^<>]+/?>}, '')
+                    .strip
           end
         end
       end
