@@ -8,7 +8,7 @@ module Lunchplaner
       end
 
       def daily
-        [data]
+        ['Vegetarisk Buffé med dagens mysterieprotein']
       end
 
       private
