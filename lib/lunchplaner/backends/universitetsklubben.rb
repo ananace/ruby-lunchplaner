@@ -3,16 +3,18 @@ module Lunchplaner
     class Universitetsklubben < Lunchplaner::Backend
       url 'http://www.hors.se/restaurang/universitetsklubben/'
 
-      def links
-        [
-          { href: "http://www.hors.se/veckans-meny/?week_for=#{Time.now.strftime '%Y-%m-%d'}&rest=179", type: 'calendar', colour: 'primary', title: 'Hela veckans meny' }
-        ] + super
-      end
-
       def daily
-        data.css('.hors-menu .row .text-left').map do |e|
-          e.content.strip.delete "\n"
-        end
+        items = data.css('.menu-container .menu-col .menu-item')
+        day = Time.now.wday - 1
+
+        return [] if day < 0 || day > 4
+
+        items[day]
+          .content
+          .strip
+          .split("\n")
+          .reject { |c| c =~ DAY_REX }
+          .reject { |c| c.length < 5 }
       end
     end
   end
