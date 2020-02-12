@@ -14,26 +14,21 @@ module Lunchplaner
       private
 
       def data
-        day = nil
-        week = nil
-        raw_data.at_css('.__columns div[data-col=7] .block-section .block-section-container').css('h6, p').each_with_object({}) do |e, h|
-          next if e.content.strip.empty?
+        curday = WEEKDAYS[Time.now.wday].downcase
 
-          if day
-            h[:daily] = [e.content]
-            day = nil
-          elsif week
+        raw_data.css('.__columns')
+          .last
+          .css('div.block')
+          .reject { |b| b.text.empty? }
+          .select { |b| b.text =~ DAY_REX || b.text =~ /veckans/i }
+          .each_with_object({}) do |e, h|
+          p = e.css('p')
+            
+          if e.content.downcase.start_with?(curday)
+            h[:daily] = [e.content.gsub("\xc2\xa0", ' ').gsub(DAY_REX, '').strip]
+          elsif e.content.downcase.start_with? 'veckans '
             h[:weekly] = [] unless h[:weekly]
-            h[:weekly] << e.content unless h[:weekly].include? e.content
-            week = nil
-          elsif e.content.start_with? 'Veckans '
-            week = true
-          elsif (e.content.start_with?('Måndag') && Time.now.monday?) \
-             || (e.content.start_with?('Tisdag') && Time.now.tuesday?) \
-             || (e.content.start_with?('Onsdag') && Time.now.wednesday?) \
-             || (e.content.start_with?('Torsdag') && Time.now.thursday?) \
-             || (e.content.start_with?('Fredag') && Time.now.friday?)
-            day = true
+            h[:weekly] << e.content.gsub("\xc2\xa0", ' ').gsub(/veckans (kött|under ytan|vegetariska)/i, '').strip
           end
         end
       end
