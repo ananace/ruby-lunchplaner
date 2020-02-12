@@ -27,15 +27,11 @@ Style/RescueModifier:
 Metrics/MethodLength:
   Max: 40
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 190
 
 Metrics/AbcSize:
   Enabled: false
-
-Performance/FixedSize:
-  Exclude:
-    - 'test/**/*'
 
 Metrics/BlockLength:
   Exclude:

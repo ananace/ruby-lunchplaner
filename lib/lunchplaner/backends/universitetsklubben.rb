@@ -7,7 +7,7 @@ module Lunchplaner
         items = data.css('.menu-container .menu-col .menu-item')
         day = Time.now.wday - 1
 
-        return [] if day < 0 || day > 4
+        return [] if day.negative? || day > 4
 
         items[day]
           .content
