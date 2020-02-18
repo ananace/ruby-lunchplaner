@@ -139,7 +139,7 @@ push:image:
             paths:
             - backend:
                 serviceName: ${CI_ENVIRONMENT_SLUG}-lunchplaner
-                servicePort: 4567
+                servicePort: 80
               path: /
       EOF
   variables:
