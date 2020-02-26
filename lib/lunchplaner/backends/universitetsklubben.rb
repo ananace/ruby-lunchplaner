@@ -4,7 +4,7 @@ module Lunchplaner
       url 'http://www.hors.se/restaurang/universitetsklubben/'
 
       def daily
-        items = data.css('.menu-container .menu-col .menu-item')
+        items = data.css('#current .menu-container .menu-col .menu-item')
         day = Time.now.wday - 1
 
         return [] if day.negative? || day > 4
