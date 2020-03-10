@@ -1,7 +1,7 @@
 module Lunchplaner
   module Backends
     class Universitetsklubben < Lunchplaner::Backend
-      url 'http://www.hors.se/restaurang/universitetsklubben/'
+      url 'https://www.hors.se/linkoping/17/6/universitetsklubben/'
 
       def daily
         items = data.css('#current .menu-container .menu-col .menu-item')
