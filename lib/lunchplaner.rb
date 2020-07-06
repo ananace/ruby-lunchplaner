@@ -11,6 +11,7 @@ module Lunchplaner
 
   autoload :Backend, 'lunchplaner/backend'
   module Backends
+    autoload :BrodernasKok,        'lunchplaner/backends/brodernaskok'
     autoload :ChiliLime,           'lunchplaner/backends/chililime'
     autoload :Collegium,           'lunchplaner/backends/collegium'
     autoload :FreshMarket,         'lunchplaner/backends/fresh_market'
