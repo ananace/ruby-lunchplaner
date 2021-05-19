@@ -32,10 +32,11 @@ push:image:
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: []
-  script:
+  before_script:
     - mkdir -p /root/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_JOB_TOKEN\"}}}" > /root/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile $DOCKER_PROXY --destination $CI_REGISTRY_IMAGE --verbosity warn
+  script:
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile $DOCKER_PROXY --destination $CI_REGISTRY_IMAGE
   only:
     - master
 
@@ -80,12 +81,7 @@ push:image:
               environment: $CI_ENVIRONMENT_SLUG
           spec:
             containers:
-            - env:
-              - name: http_proxy
-                value: http://squid-proxy.kube-system.svc:3128/
-              - name: https_proxy
-                value: http://squid-proxy.kube-system.svc:3128/
-              image: $CI_REGISTRY_IMAGE
+            - image: $CI_REGISTRY_IMAGE
               imagePullPolicy: Always
               name: lunchplaner
               ports:

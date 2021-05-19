@@ -15,7 +15,7 @@ module Lunchplaner
         end.map do |e|
           e.gsub(/[0-9A-Z]\. ?/, '')
         end.map do |e|
-          e[0].upcase + e[1..-1]
+          e[0].upcase + e[1..]
         end.select do |e|
           e.length > 3
         end
@@ -29,7 +29,7 @@ module Lunchplaner
         end.flatten.select do |e|
           e.length > 2
         end.map do |e|
-          e[0].upcase + e[1..-1]
+          e[0].upcase + e[1..]
         end.select do |e|
           e.length > 3
         end
