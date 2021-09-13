@@ -1,5 +1,6 @@
 require 'lunchplaner/version'
 require 'psych'
+require 'time'
 
 module Lunchplaner
   def self.all
