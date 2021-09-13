@@ -18,7 +18,7 @@ module Lunchplaner
       private
 
       def data
-        blocks = raw_data .css('.productGroup')
+        blocks = raw_data.css('.productGroup')
         weekly = blocks.first.css('.product').map { |b| b.at_css('p').text.strip }
         daily = blocks.find { |b| b.at_css('.summary > h2').text.include?(WEEKDAYS[Time.now.wday]) }
                       .css('.product > h3 > span:first')
