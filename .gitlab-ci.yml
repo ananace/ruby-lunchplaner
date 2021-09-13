@@ -72,7 +72,7 @@ push:image:
           metadata:
             annotations:
               se.liu.gitlab/commit: $CI_COMMIT_SHA
-              prometheus.io/port: "4567"
+              prometheus.io/port: "9292"
               prometheus.io/scrape: "true"
               app.gitlab.com/app: $CI_PROJECT_PATH_SLUG
               app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
@@ -85,11 +85,11 @@ push:image:
               imagePullPolicy: Always
               name: lunchplaner
               ports:
-              - containerPort: 4567
+              - containerPort: 9292
                 protocol: TCP
               readinessProbe:
                 tcpSocket:
-                  port: 4567
+                  port: 9292
               resources:
                 limits:
                   cpu: 100m
@@ -110,7 +110,7 @@ push:image:
         - name: web
           port: 80
           protocol: TCP
-          targetPort: 4567
+          targetPort: 9292
         selector:
           app: lunchplaner
           environment: $CI_ENVIRONMENT_SLUG

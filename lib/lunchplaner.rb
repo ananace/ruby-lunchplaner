@@ -1,4 +1,6 @@
 require 'lunchplaner/version'
+require 'lunchplaner/api'
+
 require 'psych'
 require 'time'
 
