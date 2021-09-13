@@ -16,10 +16,14 @@ module Lunchplaner
       self.class.url
     end
 
+    def map_search
+      "#{name}, Linköping"
+    end
+
     def links
       [
         { href: url, type: 'link', colour: 'primary', title: 'Restaurangens sida' },
-        { href: "https://www.google.com/maps/search/#{CGI.escape("#{name}, Linköping")}", type: 'map', colour: 'secondary', title: 'Se restaurangen på karta' }
+        { href: "https://www.google.com/maps/search/#{CGI.escape(map_search)}", type: 'map', colour: 'secondary', title: 'Se restaurangen på karta' }
       ]
     end
 
