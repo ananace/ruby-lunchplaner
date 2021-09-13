@@ -16,6 +16,9 @@ module Lunchplaner
     # autoload :FreshMarket,         'lunchplaner/backends/fresh_market'
     autoload :Husman,              'lunchplaner/backends/husman'
     autoload :P2g,                 'lunchplaner/backends/p2g'
-    autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben'
+
+    if Time.now > Time.parse('2021-04-10')
+      autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben' # Opens on 4/10
+    end
   end
 end
