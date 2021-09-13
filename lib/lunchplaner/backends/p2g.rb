@@ -20,22 +20,12 @@ module Lunchplaner
       def data
         daily = []
         at_day = false
-        raw_data.at_css('.eltd-container-inner.clearfix').children.each do |e|
-          if e.name == 'h3'
-            at_day = false
-
-            if e.text.strip.include?('Måndag') && Time.now.monday? ||
-               e.text.strip.include?('Tisdag') && Time.now.tuesday? ||
-               e.text.strip.include?('Onsdag') && Time.now.wednesday? ||
-               e.text.strip.include?('Torsdag') && Time.now.thursday? ||
-               e.text.strip.include?('Fredag') && Time.now.friday?
-              at_day = true
-            end
-          elsif at_day && e.name == 'p'
-            daily << e.content.strip
-          end
+        block = raw_data.css('.full-width-all > .block-section-container > .block-columns > div > .block-section > .block-section-container')
+          .find do |b|
+          b.at_css('.block-header').text.strip.include?(WEEKDAYS[Time.now.wday])
         end
 
+        daily = block.css('p').map { |e| e.text.gsub(/\d+ kr/, '').strip }
         weekly = daily.pop(5)
 
         { daily: daily, weekly: weekly }
