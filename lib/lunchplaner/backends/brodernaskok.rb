@@ -14,7 +14,7 @@ module Lunchplaner
       private
 
       def data
-        { weekly: raw_data.at_css('.menu-section').css('.menu-item-title').map { |e| e.text } }
+        { weekly: raw_data.at_css('.menu-section').css('.menu-item-title').map(&:text) }
       end
     end
   end

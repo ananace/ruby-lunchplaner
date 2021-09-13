@@ -18,10 +18,9 @@ module Lunchplaner
       private
 
       def data
-        daily = []
-        at_day = false
-        block = raw_data.css('.full-width-all > .block-section-container > .block-columns > div > .block-section > .block-section-container')
-          .find do |b|
+        block = raw_data
+                .css('.full-width-all > .block-section-container > .block-columns > div > .block-section > .block-section-container')
+                .find do |b|
           b.at_css('.block-header').text.strip.include?(WEEKDAYS[Time.now.wday])
         end
 
