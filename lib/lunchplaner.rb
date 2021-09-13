@@ -18,7 +18,7 @@ module Lunchplaner
     autoload :Husman,              'lunchplaner/backends/husman'
     autoload :P2g,                 'lunchplaner/backends/p2g'
 
-    if Time.now > Time.parse('2021-04-10')
+    if Time.now > Time.parse('2021-10-04')
       autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben' # Opens on 4/10
     end
   end
