@@ -128,6 +128,7 @@ push:image:
         annotations:
           kubernetes.io/ingress.class: nginx-public
           kubernetes.io/tls-acme: "true"
+          traefik.ingress.kubernetes.io/router.middlewares: traefik-https-redirect@kubernetescrd
         name: ${CI_ENVIRONMENT_SLUG}-lunchplaner-public
         labels:
           app: lunchplaner
@@ -152,6 +153,7 @@ push:image:
       metadata:
         annotations:
           kubernetes.io/tls-acme: "true"
+          traefik.ingress.kubernetes.io/router.middlewares: traefik-https-redirect@kubernetescrd
         name: ${CI_ENVIRONMENT_SLUG}-lunchplaner
         labels:
           app: lunchplaner
