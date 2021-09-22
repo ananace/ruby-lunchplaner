@@ -8,7 +8,18 @@ module Lunchplaner
       end
 
       def daily
-        ['Vegetarisk Buffé med dagens mysterieprotein']
+        [
+          'Dagens rätt',
+          'Dagens vegetariska',
+          'Dagens soppa'
+        ]
+      end
+
+      def weekly
+        %w[
+          Bowl
+          Falafel
+        ]
       end
 
       private
