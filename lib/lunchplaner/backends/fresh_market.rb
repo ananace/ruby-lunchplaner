@@ -27,12 +27,15 @@ module Lunchplaner
           next if e.content.strip.empty?
 
           curday = WEEKDAYS[Time.now.wday]
-          next unless e.at_css('b').content.include?(curday)
+          bold = e.at_css('b')
+          next unless bold
+          next unless bold.content.include?(curday)
 
-          return e.children[1..]
-                  .text
+          return e.text
+                  .sub(DAY_REX, '')
                   .split("\n")
                   .map(&:strip)
+                  .reject(&:empty?)
         end
       end
     end
