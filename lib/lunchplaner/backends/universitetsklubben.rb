@@ -11,10 +11,13 @@ module Lunchplaner
 
         items[day]
           .content
+          .encode('ISO-8859-1', 'utf-8')
+          .tap { |c| c.force_encoding('utf-8') }
           .strip
           .split("\n")
           .reject { |c| c =~ DAY_REX }
           .reject { |c| c.length < 5 }
+          .map(&:strip)
       end
     end
   end
