@@ -23,19 +23,25 @@ module Lunchplaner
       private
 
       def data
-        raw_data.at_css('.menu--left-content > .overflow').css('p').each do |e|
-          next if e.content.strip.empty?
+        content = raw_data.at_css('.menu--left-content > .overflow').content.split("\n").map(&:strip)
+        curday = WEEKDAYS[Time.now.wday]
+        index = content.index(curday)
+        if index >= 0
+          content[index + 1, 2]
+        else
+          raw_data.at_css('.menu--left-content > .overflow').css('p').each do |e|
+            next if e.content.strip.empty?
 
-          curday = WEEKDAYS[Time.now.wday]
-          bold = e.at_css('b')
-          next unless bold
-          next unless bold.content.include?(curday)
+            bold = e.at_css('b')
+            next unless bold
+            next unless bold.content.include?(curday)
 
-          return e.text
-                  .sub(DAY_REX, '')
-                  .split("\n")
-                  .map(&:strip)
-                  .reject(&:empty?)
+            return e.text
+                    .sub(DAY_REX, '')
+                    .split("\n")
+                    .map(&:strip)
+                    .reject(&:empty?)
+          end
         end
       end
     end
