@@ -26,7 +26,7 @@ module Lunchplaner
         content = raw_data.at_css('.menu--left-content > .overflow').content.split("\n").map(&:strip)
         curday = WEEKDAYS[Time.now.wday]
         index = content.index(curday)
-        if index >= 0
+        if index
           content[index + 1, 2]
         else
           raw_data.at_css('.menu--left-content > .overflow').css('p').each do |e|
