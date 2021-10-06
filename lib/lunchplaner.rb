@@ -23,5 +23,10 @@ module Lunchplaner
     autoload :P2g,                 'lunchplaner/backends/p2g'
     autoload :SpicyWokNRoll,       'lunchplaner/backends/spicy_wok_n_roll'
     autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben'
+    autoload :Zodiaken,            'lunchplaner/backends/zodiaken'
+  end
+
+  module Common
+    autoload :Hors, 'lunchplaner/common/hors'
   end
 end
