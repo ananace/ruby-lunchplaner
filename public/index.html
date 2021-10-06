@@ -83,7 +83,7 @@
         }
       }
       .meny-kiosk {
-        column-count: 5 !important;
+        column-count: 4 !important;
         column-gap: 0.5rem !important;
       }
     </style>
@@ -95,41 +95,90 @@
 
     <script>
       App = new Vue({
-                    el: "#app",
+        el: "#app",
 
-                    data() {
-                      return {
-                        backends: {},
-                        hovered: null,
-                        mapLink: null,
-                        isKiosk: window.location.search.includes('kiosk')
-                      }
-                    },
+        data: {
+          backends: {},
+          hovered: null,
+          mapLink: null,
+          query: window.location.search.replace('?','').split('&')
+        },
 
-                    created() {
-                      var namepromise = axios.get('/api/names').then(function(resp) {
-                        for (it in resp.data) {
-                          let name = resp.data[it];
-                          if (!App.backends[name]) {
-                            Vue.set(App.backends, name, {});
-                          }
-                        }
-                      });
+        created: function() {
+          var namepromise = axios.get('/api/names').then(function(resp) {
+            if (App.hasQuery('num')) {
+              var names = []
+              for (it in resp.data) {
+                let name = resp.data[it];
+                names.push(name);
+              }
+              var perPage = Number(App.getQuery('num'));
+              var page = (Number(App.getQuery('page') || 1)) - 1;
 
-                      axios.get('/api/all', { timeout: 750}).then(function(resp) {
-                        App.backends = Object.assign({}, resp.data);
-                      }).catch(function(ex) {
-                        namepromise.then(function() {
-                          $.each(App.backends, function(backend, _obj) {
-                            axios.get('/api/' + backend).then(function(resp) {
-                              Vue.set(App.backends, backend, Object.assign({}, resp.data));
-                            }).catch(function(error) {
-                              Vue.set(App.backends, backend, { name: App.backends[backend].name, error: error, summary: $(error.response.data).find('#summary').html() });
-                            });
-                          });
-                        });
-                      });
-                    }
+              $.each(names.slice(page * perPage, (page * perPage) + perPage), function(_i, backend) {
+                Vue.set(App.backends, backend, {});
+                axios.get('/api/' + backend + '/name', { timeout: 750}).then(function(resp) {
+                  Vue.set(App.backends[backend], 'name', resp.data);
+                }).catch(function(error) {
+                  if (error.response != undefined) {
+                    Vue.set(App.backends, backend, { error: error, summary: $(error.response.data).find('#summary').html() });
+                  } else {
+                    Vue.set(App.backends, backend, { error: error });
+                  }
+                })
+                axios.get('/api/' + backend, { timeout: 2500}).then(function(resp) {
+                    Vue.set(App.backends, backend, Object.assign({}, App.backends[backend], resp.data));
+                }).catch(function(error) {
+                  if (error.response != undefined) {
+                    Vue.set(App.backends, backend, { error: error, summary: $(error.response.data).find('#summary').html() });
+                  } else {
+                    Vue.set(App.backends, backend, { error: error });
+                  }
+                })
+              });
+            } else {
+              for (it in resp.data) {
+                let name = resp.data[it];
+                if (!App.backends[name]) {
+                  Vue.set(App.backends, name, {});
+                }
+              }
+            }
+          });
+
+          setTimeout(function() {
+            if (!App.hasQuery('n')) {
+              axios.get('/api/all', { timeout: 750}).then(function(resp) {
+                App.backends = Object.assign({}, resp.data);
+              }).catch(function(ex) {
+                namepromise.then(function() {
+                  $.each(App.backends, function(backend, _obj) {
+                    axios.get('/api/' + backend).then(function(resp) {
+                      Vue.set(App.backends, backend, Object.assign({}, resp.data));
+                    }).catch(function(error) {
+                      Vue.set(App.backends, backend, { name: App.backends[backend].name, error: error, summary: $(error.response.data).find('#summary').html() });
+                    });
+                  });
+                });
+              });
+            }
+          }, 0);
+        },
+        computed: {
+          isKiosk: function() {
+            return this.hasQuery('kiosk');
+          },
+        },
+        methods: {
+          hasQuery: function(name) {
+            return this.getQuery(name) != undefined;
+          },
+          getQuery: function(name) {
+            var e = this.query.find(e => e.startsWith(name));
+            if (e == undefined) { return e; }
+            return e.split('=')[1] || true;
+          }
+        }
       });
     </script>
   </body>
