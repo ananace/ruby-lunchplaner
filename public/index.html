@@ -117,15 +117,6 @@
 
               $.each(names.slice(page * perPage, (page * perPage) + perPage), function(_i, backend) {
                 Vue.set(App.backends, backend, {});
-                axios.get('/api/' + backend + '/name', { timeout: 750}).then(function(resp) {
-                  Vue.set(App.backends[backend], 'name', resp.data);
-                }).catch(function(error) {
-                  if (error.response != undefined) {
-                    Vue.set(App.backends, backend, { error: error, summary: $(error.response.data).find('#summary').html() });
-                  } else {
-                    Vue.set(App.backends, backend, { error: error });
-                  }
-                })
                 axios.get('/api/' + backend, { timeout: 2500}).then(function(resp) {
                     Vue.set(App.backends, backend, Object.assign({}, App.backends[backend], resp.data));
                 }).catch(function(error) {
