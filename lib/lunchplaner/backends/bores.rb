@@ -4,7 +4,7 @@ module Lunchplaner
       url 'https://bores.se/'
 
       def map_search
-        '58.40361288352928, 15.578970128074296'
+        'BORES, Studievägen, Linköping'
       end
 
       def weekly

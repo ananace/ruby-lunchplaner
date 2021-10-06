@@ -7,6 +7,10 @@ module Lunchplaner
         'Fresh Market by Östgötakök'
       end
 
+      def map_search
+        'Studenthuset, Linköpings universitet, Linköping'
+      end
+
       def daily
         data + [
           'Dagens soppa'
