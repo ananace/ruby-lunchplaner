@@ -8,14 +8,14 @@
     <title>Lunchrestauranger, nära Linköpings universitet</title>
   </head>
   <body>
-    <div id="app" class="container" v-cloak>
+    <div id="app" :class="{ 'container': !isKiosk, 'container-fluid': isKiosk }" v-cloak>
       <div class="row" v-if="!backends">
         <h1 class="m-5">Loading, please wait...</h1>
       </div>
 
-      <div class="card-columns my-2" id="menyer" v-else>
+      <div class="card-columns my-2" :class="{ 'meny-kiosk': isKiosk }" id="menyer" v-else>
         <div v-for="(place, clean_name) in backends">
-          <div class="card my-2" :class="{ 'border-primary': hovered == clean_name, 'border-danger': place.error }" :id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
+          <div class="card" :class="{ 'my-1': isKiosk, 'my-2': !isKiosk, 'border-primary': hovered == clean_name, 'border-danger': place.error }" :id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
             <div class="card-header d-flex w-100 justify-content-between">
               <div>{{ place.name || clean_name }}</div>
 
@@ -82,6 +82,10 @@
           column-count: 2;
         }
       }
+      .meny-kiosk {
+        column-count: 5 !important;
+        column-gap: 0.5rem !important;
+      }
     </style>
 
     <script src="//unpkg.com/vue/dist/vue.min.js"></script>
@@ -97,7 +101,8 @@
                       return {
                         backends: {},
                         hovered: null,
-                        mapLink: null
+                        mapLink: null,
+                        isKiosk: window.location.search.includes('kiosk')
                       }
                     },
 
