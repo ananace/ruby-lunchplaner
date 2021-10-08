@@ -37,7 +37,7 @@ App = new Vue({
         names = names.slice(page * perPage, (page * perPage) + perPage);
         names.forEach(function(backend) {
           Vue.set(App.backends, backend, {});
-          promises.push(axios.get('/api/' + backend, { timeout: 2500 })
+          promises.push(axios.get('/api/' + backend)
                .then(function(resp) {
             console.log("Retrieved data for " + backend);
             Vue.set(App.backends, backend, Object.assign({}, App.backends[backend], resp.data));

@@ -15,7 +15,7 @@
       </div>
 
       <div v-else>
-        <div class="row my-2" :class="{ 'meny-kiosk': isKiosk }" id="menyer">
+        <div class="row my-2" :class="{ 'meny-kiosk': isKiosk, 'mt-5': isKiosk }" id="menyer">
           <div v-for="(place, clean_name) in backends" class="cardholder col-sm-12 col-md-6 my-2" :class="{ 'col-lg-3': isKiosk }">
             <div class="card" :class="{ 'border-primary': hovered == clean_name, 'border-danger': place.error }" :id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
               <div class="card-header d-flex w-100 justify-content-between">
