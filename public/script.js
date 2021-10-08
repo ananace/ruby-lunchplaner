@@ -124,16 +124,18 @@ App = new Vue({
     reloadLayout: function() {
       if (!this.masonry) {
         console.log("Initializing masonry");
-        this.masonry = new Masonry('#menyer', {
-          itemSelector: '.cardholder',
-          percentPosition: true,
-          transitionDuration: 0
-        });
+        setTimeout(function() {
+          App.masonry = new Masonry('#menyer', {
+            itemSelector: '.cardholder',
+            percentPosition: true,
+            transitionDuration: 0
+          });
+        }, 100);
 
-        setTimeout(() => App.masonry.layout(), 100);
+        setTimeout(() => App.masonry.layout(), 150);
       } else {
         console.log("Reloading masonry layout");
-        this.masonry.layout();
+        setTimeout(() => App.masonry.layout(), 100);
       }
     }
   }
