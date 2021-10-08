@@ -11,7 +11,7 @@ module Lunchplaner
         weekly_url = data.css('a.btn').first['href']
 
         [
-          { href: weekly_url, type: 'file-pdf-o', colour: 'primary', title: 'Hela veckans meny' }
+          { href: weekly_url, type: 'far file-pdf', colour: 'primary', title: 'Hela veckans meny' }
         ] + super
       end
 

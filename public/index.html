@@ -23,7 +23,7 @@
                 <div>{{ place.name || clean_name }}</div>
 
                 <div class="btn-group btn-group-sm" v-if="place.links">
-                  <a v-for="(link) in place.links" :title="link.title" :class="['btn', 'btn-sm', 'btn-outline-' + mapTheme(link.colour || 'primary')]" :href="link.href" :target="link.target || '_blank'"><i :class="['fa', 'fa-' + (link.type || 'link')]"></i></a>
+                  <a v-for="(link) in place.links" :title="link.title" class="btn btn-sm" :class="['btn-outline-' + mapTheme(link.colour || 'primary')]" :href="link.href" :target="link.target || '_blank'"><i :class="mapIcon(link.type)"></i></a>
                 </div>
               </div>
               <div class="card-body">

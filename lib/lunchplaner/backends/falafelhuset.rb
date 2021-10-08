@@ -21,7 +21,7 @@ module Lunchplaner
 
       def links
         [
-          { href: 'https://falafelhuset.se/files/Alaaeddin/campusmeny.jpg', type: 'file-image-o', colour: 'primary', title: 'Campus menyn' }
+          { href: 'https://falafelhuset.se/files/Alaaeddin/campusmeny.jpg', type: 'far file-image', colour: 'primary', title: 'Campus menyn' }
         ] + super
       end
     end

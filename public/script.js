@@ -119,6 +119,21 @@ App = new Vue({
         Vue.set(App.backends, backend, { error: error });
       }
     },
+    mapIcon: function(icon) {
+      var hasClass = false;
+      var classes = icon.split(' ').map(function(w) {
+        if (w.match(/^fa[srldb]$/)) {
+          hasClass = true;
+          return w;
+        } else {
+          return 'fa-' + w;
+        }
+      });
+      if (!hasClass) {
+        classes.unshift('fas');
+      }
+      return classes;
+    },
     mapTheme: function(colour) {
       if (colour != 'THEME') {
         return colour;
