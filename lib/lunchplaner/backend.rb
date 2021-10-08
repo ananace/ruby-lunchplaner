@@ -28,7 +28,7 @@ module Lunchplaner
     def links
       [
         { href: url, type: 'link', colour: 'primary', title: 'Restaurangens sida' },
-        { href: "https://www.google.com/maps/search/#{CGI.escape(map_search)}", type: 'map', colour: 'secondary', title: 'Se restaurangen på karta' }
+        { href: "https://www.google.com/maps/search/#{CGI.escape(map_search)}", type: 'map', colour: 'THEME', title: 'Se restaurangen på karta' }
       ]
     end
 

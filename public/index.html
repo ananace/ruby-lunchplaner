@@ -3,55 +3,58 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="bootstrap-light.min.css"> -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
     <title>Lunchrestauranger, nära Linköpings universitet</title>
   </head>
   <body>
-    <div id="app" :class="{ 'container': !isKiosk, 'container-fluid': isKiosk }" v-cloak>
+    <div id="app" class="light" :class="{ 'container': !isKiosk, 'container-fluid': isKiosk }" v-cloak>
       <div class="row" v-if="!backends">
         <h1 class="m-5">Loading, please wait...</h1>
       </div>
 
-      <div class="card-columns my-2" :class="{ 'meny-kiosk': isKiosk }" id="menyer" v-else>
-        <div v-for="(place, clean_name) in backends">
-          <div class="card" :class="{ 'my-1': isKiosk, 'my-2': !isKiosk, 'border-primary': hovered == clean_name, 'border-danger': place.error }" :id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
-            <div class="card-header d-flex w-100 justify-content-between">
-              <div>{{ place.name || clean_name }}</div>
+      <div v-else>
+        <div class="row my-2" :class="{ 'meny-kiosk': isKiosk }" id="menyer">
+          <div v-for="(place, clean_name) in backends" class="cardholder col-sm-12 col-md-6 my-2" :class="{ 'col-lg-3': isKiosk }">
+            <div class="card" :class="{ 'border-primary': hovered == clean_name, 'border-danger': place.error }" :id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
+              <div class="card-header d-flex w-100 justify-content-between">
+                <div>{{ place.name || clean_name }}</div>
 
-              <div class="btn-group" v-if="place.links">
-                <a v-for="(link) in place.links.slice().reverse()" :title="link.title" :class="['btn', 'btn-sm', 'btn-outline-' + (link.colour || 'primary')]" :href="link.href" :target="link.target || '_blank'"><i :class="['fa', 'fa-' + (link.type || 'link')]"></i></a>
+                <div class="btn-group btn-group-sm" v-if="place.links">
+                  <a v-for="(link) in place.links" :title="link.title" :class="['btn', 'btn-sm', 'btn-outline-' + mapTheme(link.colour || 'primary')]" :href="link.href" :target="link.target || '_blank'"><i :class="['fa', 'fa-' + (link.type || 'link')]"></i></a>
+                </div>
               </div>
-            </div>
-            <div class="card-body">
-              <h5 class="card-text" v-if="place.daily">Idag:</h5>
-              <ul class="list-group list-group-flush" v-for="meal in place.daily" v-if="place.daily">
-                <li class="list-group-item list-group-item-action border-0 rounded">{{ meal }}</li>
-              </ul>
+              <div class="card-body">
+                <h5 class="card-text" v-if="place.daily">Idag:</h5>
+                <ul class="list-group list-group-flush" v-for="meal in place.daily" v-if="place.daily">
+                  <li class="list-group-item list-group-item-action border-0 rounded">{{ meal }}</li>
+                </ul>
 
-              <h5 class="card-text" v-bind:class="{ 'mt-4': place.daily }" v-if="place.weekly">Hela veckan:</h5>
-              <ul class="list-group list-group-flush" v-for="meal in place.weekly" v-if="place.weekly">
-                <li class="list-group-item list-group-item-action border-0 rounded">{{ meal }}</li>
-              </ul>
+                <h5 class="card-text" v-bind:class="{ 'mt-4': place.daily }" v-if="place.weekly">Hela veckan:</h5>
+                <ul class="list-group list-group-flush" v-for="meal in place.weekly" v-if="place.weekly">
+                  <li class="list-group-item list-group-item-action border-0 rounded">{{ meal }}</li>
+                </ul>
 
-              <div class="text-center" v-if="place.error"><h5>{{ place.error.toString() }}</h5></div>
-              <div class="error-summary mt-3" v-if="place.summary" v-html="place.summary"></div>
+                <div class="text-center" v-if="place.error"><h5>{{ place.error.toString() }}</h5></div>
+                <div class="error-summary mt-3" v-if="place.summary" v-html="place.summary"></div>
 
-              <div class="m-5" v-if="!place.error && !place.daily && !place.weekly">
-                <h4 class="card-text">Loading...</h4>
+                <div class="m-5" v-if="!place.error && !place.daily && !place.weekly">
+                  <h4 class="card-text">Loading...</h4>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="position-static text-center" id="footer">
-        <p class="text-muted font-weight-light">Projektet kan återfinnas på <a href="https://gitlab.liu.se/aleol57/lunchplaner">GitLab</a>, skapa ärenden där för tilläggning av fler restauranger.</p>
+        <footer class="text-center">
+          <p class="text-muted font-weight-light">Projektet kan återfinnas på <a href="https://gitlab.liu.se/aleol57/lunchplaner">GitLab</a>, skapa ärenden där för tilläggning av fler restauranger.</p>
+        </footer>
       </div>
     </div>
 
     <style>
-      body {
+      #app.light:root body {
         background-color: #eee;
       }
 
@@ -71,106 +74,12 @@
         font-size: 0.9rem;
         margin-top: -5px;
       }
-
-      @media (min-width: 576px) {
-        #menyer {
-          column-count: 1;
-        }
-      }
-      @media (min-width: 992px) {
-        #menyer {
-          column-count: 2;
-        }
-      }
-      .meny-kiosk {
-        column-count: 4 !important;
-        column-gap: 0.5rem !important;
-      }
     </style>
 
     <script src="//unpkg.com/vue/dist/vue.min.js"></script>
     <script src="//unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous"></script>
 
-    <script>
-      App = new Vue({
-        el: "#app",
-
-        data: {
-          backends: {},
-          hovered: null,
-          mapLink: null,
-          query: window.location.search.replace('?','').split('&')
-        },
-
-        created: function() {
-          var namepromise = axios.get('/api/names').then(function(resp) {
-            if (App.hasQuery('num')) {
-              var names = []
-              for (it in resp.data) {
-                let name = resp.data[it];
-                names.push(name);
-              }
-              var perPage = Number(App.getQuery('num'));
-              var page = (Number(App.getQuery('page') || 1)) - 1;
-
-              $.each(names.slice(page * perPage, (page * perPage) + perPage), function(_i, backend) {
-                Vue.set(App.backends, backend, {});
-                axios.get('/api/' + backend, { timeout: 2500}).then(function(resp) {
-                    Vue.set(App.backends, backend, Object.assign({}, App.backends[backend], resp.data));
-                }).catch(function(error) {
-                  if (error.response != undefined) {
-                    Vue.set(App.backends, backend, { error: error, summary: $(error.response.data).find('#summary').html() });
-                  } else {
-                    Vue.set(App.backends, backend, { error: error });
-                  }
-                })
-              });
-            } else {
-              for (it in resp.data) {
-                let name = resp.data[it];
-                if (!App.backends[name]) {
-                  Vue.set(App.backends, name, {});
-                }
-              }
-            }
-          });
-
-          setTimeout(function() {
-            if (!App.hasQuery('n')) {
-              axios.get('/api/all', { timeout: 750}).then(function(resp) {
-                App.backends = Object.assign({}, resp.data);
-              }).catch(function(ex) {
-                namepromise.then(function() {
-                  $.each(App.backends, function(backend, _obj) {
-                    axios.get('/api/' + backend).then(function(resp) {
-                      Vue.set(App.backends, backend, Object.assign({}, resp.data));
-                    }).catch(function(error) {
-                      Vue.set(App.backends, backend, { name: App.backends[backend].name, error: error, summary: $(error.response.data).find('#summary').html() });
-                    });
-                  });
-                });
-              });
-            }
-          }, 0);
-        },
-        computed: {
-          isKiosk: function() {
-            return this.hasQuery('kiosk');
-          },
-        },
-        methods: {
-          hasQuery: function(name) {
-            return this.getQuery(name) != undefined;
-          },
-          getQuery: function(name) {
-            var e = this.query.find(e => e.startsWith(name));
-            if (e == undefined) { return e; }
-            return e.split('=')[1] || true;
-          }
-        }
-      });
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
