@@ -5,7 +5,8 @@ App = new Vue({
     backends: {},
     hovered: null,
     mapLink: null,
-    query: window.location.search.replace('?','').split('&'),
+    cookie: document.cookie.split(';').map((w) => w.trim()),
+    query: window.location.search.replace('?','').split('&').filter((w) => w.length > 0),
     masonry: null
   },
 
@@ -86,7 +87,7 @@ App = new Vue({
       return this.hasQuery('kiosk');
     },
     theme: function() {
-      if (this.hasQuery('dark')) {
+      if (!this.hasQuery('light') && (this.hasQuery('dark') || this.getCookie('theme') == 'dark')) {
         return 'dark';
       } else {
         return 'light';
@@ -99,6 +100,14 @@ App = new Vue({
     },
     getQuery: function(name) {
       var e = this.query.find(e => e.startsWith(name));
+      if (e == undefined) { return e; }
+      return e.split('=')[1] || true;
+    },
+    hasCookie: function(name) {
+      return this.getCookie(name) != undefined;
+    },
+    getCookie: function(name) {
+      var e = this.cookie.find(e => e.startsWith(name));
       if (e == undefined) { return e; }
       return e.split('=')[1] || true;
     },
@@ -119,6 +128,20 @@ App = new Vue({
         return 'dark';
       } else {
         return 'light';
+      }
+    },
+    switchTheme: function(_) {
+      var query = this.query.filter((w) => w != 'dark' && w != 'light');
+      if (this.theme == 'light') {
+        document.cookie = 'theme=dark';
+      } else {
+        document.cookie = 'theme=light';
+      }
+
+      if (query.length == 0) {
+        document.location.search = '';
+      } else {
+        document.location.search = '?' + query.filter((w) => w.length > 0).join('&');
       }
     },
     reloadLayout: function() {
