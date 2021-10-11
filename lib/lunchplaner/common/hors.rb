@@ -10,7 +10,10 @@ module Lunchplaner
       protected
 
       def data
-        items = raw_data.css('.menu-container .menu-col .menu-item')
+        correct_week = raw_data.at_css('#current')
+        correct_week ||= raw_data
+
+        items = correct_week.css('.menu-container .menu-col .menu-item')
         day = Time.now.wday - 1
         broken_encoding = items.any? do |item|
           item.content.include?(Lunchplaner::Backend::LATIN1_DETECT) ||
