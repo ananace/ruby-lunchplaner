@@ -22,7 +22,7 @@ module Lunchplaner
         weekly = blocks.first.css('.product').map { |b| b.at_css('p').text.strip }
         daily = blocks.find { |b| b.at_css('.summary > h2').text.include?(WEEKDAYS[Time.now.wday]) }
                       .css('.product > h3 > span:first')
-                      .map { |b| b.text.gsub(/[AB]\. /, '').strip }
+                      .map { |b| b.text.sub(/[A-Z]\.\s+/, '').strip }
 
         { daily: daily, weekly: weekly }
       end
