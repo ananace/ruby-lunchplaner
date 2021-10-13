@@ -29,6 +29,11 @@ module Lunchplaner
     configure :development do
       require 'sinatra/reloader'
       register Sinatra::Reloader
+
+      also_reload 'lib/lunchplaner/backends/*.rb'
+      after_reload do
+        puts 'reloaded'
+      end
     end
 
     configure :development, :production do
