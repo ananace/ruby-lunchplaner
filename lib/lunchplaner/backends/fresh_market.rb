@@ -14,15 +14,8 @@ module Lunchplaner
       end
 
       def daily
-        data + [
-          'Dagens soppa'
-        ]
-      end
-
-      def weekly
-        %w[
-          Bowl
-          Falafel
+        [
+          'Vegetarisk Lunchbuffé - animaliskt protein finns'
         ]
       end
 
