@@ -22,6 +22,7 @@ module Lunchplaner
     autoload :Falafelhuset,        'lunchplaner/backends/falafelhuset'
     autoload :FreshMarket,         'lunchplaner/backends/fresh_market'
     autoload :Husman,              'lunchplaner/backends/husman'
+    autoload :Karallen,            'lunchplaner/backends/karallen'
     autoload :P2g,                 'lunchplaner/backends/p2g'
     autoload :SpicyWokNRoll,       'lunchplaner/backends/spicy_wok_n_roll'
     autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben'
