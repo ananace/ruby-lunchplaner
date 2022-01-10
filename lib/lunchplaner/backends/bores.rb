@@ -10,11 +10,13 @@ module Lunchplaner
       end
 
       def weekly
-        [data] + [
+        burg = [
           'Orginalet/Osten/Halloumin/Kycklingen/Fiskburgaren',
           'Chefen/Tryffeln/The Bacon',
           'Osten Delux'
         ]
+        burg = [data] + burg if data
+        burg
       end
 
       private
@@ -33,6 +35,9 @@ module Lunchplaner
         now = blocks.find { |b| b.at_css('.rich-text-standard > p > strong').text.downcase.include? month }
 
         now.at_css('.rich-text-standard > p:nth-child(2)').text
+      rescue StandardError => e
+        puts "[Backends.Bores] When reading monthly burger; #{e.class}: #{e}"
+        nil
       end
     end
   end
