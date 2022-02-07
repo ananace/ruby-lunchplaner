@@ -68,7 +68,7 @@ var App = createApp({
         console.log("Retrieved all data from cache");
         self.backends = resp.data;
         self.reloadLayout();
-      }).catch(function(ex) {
+      }).catch(function(_) {
         console.log("Full retrieval timed out, running per-entry");
         namepromise.then(function() {
           var promises = []
