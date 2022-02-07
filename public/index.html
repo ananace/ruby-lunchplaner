@@ -7,40 +7,40 @@
     <title>Lunchrestauranger, nära Linköpings universitet</title>
   </head>
   <body>
-    <div id="app" class="light" :class="{ 'container': !isKiosk, 'container-fluid': isKiosk }" v-cloak>
+    <div id="app" class="light" v-cloak>
       <div class="row" v-if="!backends">
         <h1 class="m-5">Loading, please wait...</h1>
       </div>
 
-      <div v-else>
+      <div :class="containerClass" v-else>
         <div class="position-absolute top-0 start-0 m-2">
           <div v-on:click="switchTheme" class="btn btn-sm" :class="['btn-outline-' + mapTheme('THEME')]" title="Switch theme"><i class="fa" :class="{ 'fa-sun': theme=='dark', 'fa-moon': theme=='light' }"></i></div>
         </div>
         <div class="row my-2" :class="{ 'meny-kiosk': isKiosk, 'mt-5': isKiosk }" id="menyer">
-          <div v-for="(place, clean_name) in backends" class="cardholder col-sm-12 col-md-6 my-2" :class="{ 'col-lg-3': isKiosk }">
-            <div class="card" :class="{ 'border-primary': hovered == clean_name, 'border-danger': place.error }" :id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
+          <div v-for="clean_name in backendNames" class="cardholder col-sm-12 col-md-6 my-2" :class="{ 'col-lg-3': isKiosk }" :menu-name="clean_name" :menu-data="backends[clean_name]" >
+            <div class="card" :class="{ 'border-primary': hovered == clean_name, 'border-danger': backends[clean_name].error }" :id="clean_name" @mouseover="hovered = clean_name" @mouseleave="hovered = null">
               <div class="card-header d-flex w-100 justify-content-between">
-                <div>{{ place.name || clean_name }}</div>
+                <div>{{ backends[clean_name].name || clean_name }}</div>
 
-                <div class="btn-group btn-group-sm" v-if="place.links">
-                  <a v-for="(link) in place.links" :title="link.title" class="btn btn-sm" :class="['btn-outline-' + mapTheme(link.colour || 'primary')]" :href="link.href" :target="link.target || '_blank'"><i :class="mapIcon(link.type)"></i></a>
+                <div class="btn-group btn-group-sm" v-if="backends[clean_name].links">
+                  <a v-for="(link) in backends[clean_name].links" :title="link.title" class="btn btn-sm" :class="['btn-outline-' + mapTheme(link.colour || 'primary')]" :href="link.href" :target="link.target || '_blank'"><i :class="mapIcon(link.type)"></i></a>
                 </div>
               </div>
               <div class="card-body">
-                <h5 class="card-text" v-if="place.daily">Idag:</h5>
-                <ul class="list-group list-group-flush" v-for="meal in place.daily" v-if="place.daily">
+                <h5 class="card-text" v-if="backends[clean_name].daily">Idag:</h5>
+                <ul class="list-group list-group-flush" v-for="meal in backends[clean_name].daily" v-if="backends[clean_name].daily">
                   <li class="list-group-item list-group-item-action border-0 rounded">{{ meal }}</li>
                 </ul>
 
-                <h5 class="card-text" v-bind:class="{ 'mt-4': place.daily }" v-if="place.weekly">Hela veckan:</h5>
-                <ul class="list-group list-group-flush" v-for="meal in place.weekly" v-if="place.weekly">
+                <h5 class="card-text" v-bind:class="{ 'mt-4': backends[clean_name].daily }" v-if="backends[clean_name].weekly">Hela veckan:</h5>
+                <ul class="list-group list-group-flush" v-for="meal in backends[clean_name].weekly" v-if="backends[clean_name].weekly">
                   <li class="list-group-item list-group-item-action border-0 rounded">{{ meal }}</li>
                 </ul>
 
-                <div class="text-center" v-if="place.error"><h5>{{ place.error.toString() }}</h5></div>
-                <div class="error-summary mt-3" v-if="place.summary" v-html="place.summary"></div>
+                <div class="text-center" v-if="backends[clean_name].error"><h5>{{ backends[clean_name].error.toString() }}</h5></div>
+                <div class="error-summary mt-3" v-if="backends[clean_name].summary" v-html="backends[clean_name].summary"></div>
 
-                <div class="m-5" v-if="!place.error && !place.daily && !place.weekly">
+                <div class="m-5" v-if="!backends[clean_name].error && !backends[clean_name].daily && !backends[clean_name].weekly">
                   <h4 class="card-text">Loading...</h4>
                 </div>
               </div>

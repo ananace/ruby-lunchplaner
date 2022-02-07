@@ -1,16 +1,18 @@
-App = new Vue({
-  el: "#app",
+const { createApp } = Vue;
 
-  data: {
-    backends: {},
-    hovered: null,
-    mapLink: null,
-    cookie: document.cookie.split(';').map((w) => w.trim()),
-    query: window.location.search.replace('?','').split('&').filter((w) => w.length > 0),
-    masonry: null
+var masonry = null;
+var App = createApp({
+  data() {
+    return {
+      backends: {},
+      hovered: null,
+      mapLink: null,
+      cookie: document.cookie.split(';').map((w) => w.trim()),
+      query: window.location.search.replace('?','').split('&').filter((w) => w.length > 0)
+    }
   },
 
-  created: function() {
+  created() {
     if (this.theme == 'light') {
       document.getElementsByTagName('body')[0].style.backgroundColor = '#eee';
     }
@@ -20,6 +22,7 @@ App = new Vue({
     document.getElementsByTagName('head')[0].appendChild(theme);
 
     var paginated = this.hasQuery('num');
+    var self = this;
 
     var namepromise = axios.get('/api/names');
 
@@ -30,31 +33,32 @@ App = new Vue({
           let name = resp.data[it];
           names.push(name);
         }
+        names.sort();
 
-        var perPage = Number(App.getQuery('num'));
-        var page = (Number(App.getQuery('page') || 1)) - 1;
+        var perPage = Number(self.getQuery('num'));
+        var page = (Number(self.getQuery('page') || 1)) - 1;
 
         var promises = []
         names = names.slice(page * perPage, (page * perPage) + perPage);
         names.forEach(function(backend) {
-          Vue.set(App.backends, backend, {});
+          self.backends[backend] = {};
           promises.push(axios.get('/api/' + backend)
                .then(function(resp) {
             console.log("Retrieved data for " + backend);
-            Vue.set(App.backends, backend, Object.assign({}, App.backends[backend], resp.data));
+            self.backends[backend] = Object.assign(self.backends[backend], resp.data);
           }).catch(function(error) {
-            App.setError(backend, error);
+            self.setError(backend, error);
           }));
         });
 
-        Promise.allSettled(promises).then(function() { App.reloadLayout(); });
+        Promise.allSettled(promises).then(function() { self.reloadLayout(); });
       });
     } else {
       namepromise.then(function(resp) {
         for (it in resp.data) {
           let name = resp.data[it];
-          if (!App.backends[name]) {
-            Vue.set(App.backends, name, {});
+          if (!self.backends[name]) {
+            self.backends[name] = {};
           }
         }
       });
@@ -62,64 +66,73 @@ App = new Vue({
       axios.get('/api/all', { timeout: 750 })
                          .then(function(resp) {
         console.log("Retrieved all data from cache");
-        Vue.set(App, 'backends', Object.assign({}, resp.data));
-        App.reloadLayout();
+        self.backends = resp.data;
+        self.reloadLayout();
       }).catch(function(ex) {
         console.log("Full retrieval timed out, running per-entry");
         namepromise.then(function() {
           var promises = []
-          Object.keys(App.backends).forEach(function(backend) {
+          Object.keys(self.backends).forEach(function(backend) {
             promises.push(axios.get('/api/' + backend).then(function(resp) {
               console.log("Retrieved data for " + backend);
-              Vue.set(App.backends, backend, Object.assign({}, resp.data));
+              self.backends[backend] = resp.data;
             }).catch(function(error) {
-              App.setError(backend, error);
+              self.setError(backend, error);
             }));
           });
 
-          Promise.allSettled(promises).then(function() { App.reloadLayout(); });
+          Promise.allSettled(promises).then(function() { self.reloadLayout(); });
         });
       });
     }
   },
   computed: {
-    isKiosk: function() {
+    isKiosk() {
       return this.hasQuery('kiosk');
     },
-    theme: function() {
+    backendNames() {
+      return Object.keys(this.backends).sort();
+    },
+    theme() {
       if (!this.hasQuery('light') && (this.hasQuery('dark') || this.getCookie('theme') == 'dark')) {
         return 'dark';
       } else {
         return 'light';
       }
+    },
+    containerClass() {
+      return {
+        container: !this.isKiosk,
+        'container-fluid': this.isKiosk
+      }
     }
   },
   methods: {
-    hasQuery: function(name) {
+    hasQuery(name) {
       return this.getQuery(name) != undefined;
     },
-    getQuery: function(name) {
+    getQuery(name) {
       var e = this.query.find(e => e.startsWith(name));
       if (e == undefined) { return e; }
       return e.split('=')[1] || true;
     },
-    hasCookie: function(name) {
+    hasCookie(name) {
       return this.getCookie(name) != undefined;
     },
-    getCookie: function(name) {
+    getCookie(name) {
       var e = this.cookie.find(e => e.startsWith(name));
       if (e == undefined) { return e; }
       return e.split('=')[1] || true;
     },
 
-    setError: function(backend, error) {
+    setError(backend, error) {
       if (error.response != undefined) {
-        Vue.set(App.backends, backend, { error: error, summary: $(error.response.data).find('#summary').html() });
+        this.backends[backend] = { error: error, summary: $(error.response.data).find('#summary').html() };
       } else {
-        Vue.set(App.backends, backend, { error: error });
+        this.backends[backend] = { error: error };
       }
     },
-    mapIcon: function(icon) {
+    mapIcon(icon) {
       var hasClass = false;
       var classes = icon.split(' ').map(function(w) {
         if (w.match(/^fa[srldb]$/)) {
@@ -134,7 +147,7 @@ App = new Vue({
       }
       return classes;
     },
-    mapTheme: function(colour) {
+    mapTheme(colour) {
       if (colour != 'THEME') {
         return colour;
       }
@@ -145,7 +158,7 @@ App = new Vue({
         return 'light';
       }
     },
-    switchTheme: function(_) {
+    switchTheme(_) {
       var query = this.query.filter((w) => w != 'dark' && w != 'light');
       if (this.theme == 'light') {
         document.cookie = 'theme=dark';
@@ -159,22 +172,24 @@ App = new Vue({
         document.location.search = '?' + query.filter((w) => w.length > 0).join('&');
       }
     },
-    reloadLayout: function() {
-      if (!this.masonry) {
+    reloadLayout() {
+      if (!masonry) {
         console.log("Initializing masonry");
         setTimeout(function() {
-          App.masonry = new Masonry('#menyer', {
+          masonry = new Masonry('#menyer', {
             itemSelector: '.cardholder',
             percentPosition: true,
             transitionDuration: 0
           });
         }, 100);
 
-        setTimeout(() => App.masonry.layout(), 150);
+        setTimeout(() => masonry.layout(), 150);
       } else {
         console.log("Reloading masonry layout");
-        setTimeout(() => App.masonry.layout(), 100);
+        setTimeout(() => masonry.layout(), 100);
       }
     }
   }
 });
+
+App.mount('#app');
