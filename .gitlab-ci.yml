@@ -152,7 +152,7 @@ push:image:
           secretName: lunchplaner-public-tls
       ---
       # Internal only ingress
-      apiVersion: extensions/v1beta1
+      apiVersion: networking.k8s.io/v1
       kind: Ingress
       metadata:
         annotations:
@@ -168,9 +168,12 @@ push:image:
           http:
             paths:
             - backend:
-                serviceName: ${CI_ENVIRONMENT_SLUG}-lunchplaner
-                servicePort: 80
+                service:
+                  name: ${CI_ENVIRONMENT_SLUG}-lunchplaner
+                  port:
+                    number: 80
               path: /
+              pathType: Prefix
         tls:
         - hosts:
           - '*.kubernetes.it.liu.se'
