@@ -23,6 +23,7 @@ module Lunchplaner
     autoload :FreshMarket,         'lunchplaner/backends/fresh_market'
     autoload :Husman,              'lunchplaner/backends/husman'
     autoload :Karallen,            'lunchplaner/backends/karallen'
+    autoload :LaFontana,           'lunchplaner/backends/la_fontana'
     # autoload :P2g,                 'lunchplaner/backends/p2g'
     autoload :SpicyWokNRoll,       'lunchplaner/backends/spicy_wok_n_roll'
     autoload :Stangs,              'lunchplaner/backends/stangs'
