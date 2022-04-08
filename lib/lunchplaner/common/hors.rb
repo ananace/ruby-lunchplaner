@@ -26,7 +26,7 @@ module Lunchplaner
         content = content.encode('ISO-8859-1', 'UTF-8').tap { |c| c.force_encoding('UTF-8') } if broken_encoding
         content.strip
                .split("\n")
-               .reject { |c| c =~ Lunchplaner::Backend::DAY_REX }
+               .reject { |c| c.gsub(Lunchplaner::Backend::DAY_REX, '').strip.empty? }
                .reject { |c| c.length < 5 }
                .map(&:strip)
       end
