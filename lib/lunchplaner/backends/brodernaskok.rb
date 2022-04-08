@@ -30,7 +30,7 @@ module Lunchplaner
         d = { weekly: weekly.css('.menu-item-title').map(&:text) }
         return d if today.empty?
 
-        d[:daily] = today.compact.map { |i| i.text.gsub(DAY_REX, '').sub(/ [-I] /, '') }
+        d[:daily] = today.compact.map { |i| i.text.gsub(DAY_REX, '').sub(/ [-I|l] /, '') }
         d
       end
     end
