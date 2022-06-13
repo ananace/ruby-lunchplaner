@@ -30,10 +30,15 @@ module Lunchplaner
         menu = raw_data.first.dig(:fields, :sections).find { |m| m[:acf_fc_layout] == 'menu_alt' && m[:title].downcase.start_with?('lunch') }
 
         daily = Nokogiri::HTML(menu[:main_column])
-                        .css('p')
+                        .css('h3 + p')
                         .reject { |b| b[:class] == 'price' }
                         .map { |b| b.text.gsub("\n", ' - ') }
                         .select { |t| t.include? '-' }[Time.now.wday - 1]
+        daily_veg = Nokogiri::HTML(menu[:main_column])
+                            .css('h4 + p')
+                            .reject { |b| b[:class] == 'price' }
+                            .map { |b| b.text.gsub("\n", ' - ') }
+                            .select { |t| t.include? '-' }[Time.now.wday - 1]
 
         weekly = Nokogiri::HTML(menu[:side_column])
                          .css('p')
@@ -41,7 +46,7 @@ module Lunchplaner
                          .map { |b| b.text.gsub("\n", ' - ') }
                          .select { |t| t.include? '-' }
 
-        { daily: [daily], weekly: weekly }
+        { daily: [daily, daily_veg], weekly: weekly }
       end
     end
   end
