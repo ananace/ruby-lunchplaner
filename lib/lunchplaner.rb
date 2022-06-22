@@ -27,8 +27,8 @@ module Lunchplaner
     # autoload :P2g,                 'lunchplaner/backends/p2g'
     autoload :SpicyWokNRoll,       'lunchplaner/backends/spicy_wok_n_roll'
     autoload :Stangs,              'lunchplaner/backends/stangs'
-    autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben' if Time.parse('2022-06-23 23:59') <= Time.now || Time.now > Time.parse('2022-08-15 00:00')
-    autoload :Zodiaken,            'lunchplaner/backends/zodiaken' if Time.parse('2022-06-23 23:59') <= Time.now || Time.now > Time.parse('2022-08-15 00:00')
+    autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben' if Time.parse('2022-06-23 23:59') >= Time.now || Time.now >= Time.parse('2022-08-15 00:00')
+    autoload :Zodiaken,            'lunchplaner/backends/zodiaken' if Time.parse('2022-06-23 23:59') >= Time.now || Time.now >= Time.parse('2022-08-15 00:00')
   end
 
   module Common
