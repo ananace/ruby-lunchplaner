@@ -20,7 +20,7 @@ module Lunchplaner
       private
 
       def data
-        raw_data.css('.elementor-price-list-description')[Time.now.wday - 1].content.split("\n")
+        raw_data.css('.elementor-price-list-description')[Time.now.wday - 1].inner_html.split('<br>').map { |k| CGI.unescapeHTML(k).strip }
       end
     end
   end
