@@ -16,7 +16,7 @@ module Lunchplaner
 
   autoload :Backend, 'lunchplaner/backend'
   module Backends
-    autoload :Bores,               'lunchplaner/backends/bores'
+    autoload :Bores,               'lunchplaner/backends/bores' if Time.now > Time.parse('2022-07-24')
     autoload :BrodernasKok,        'lunchplaner/backends/brodernaskok'
     autoload :ChiliLime,           'lunchplaner/backends/chililime'
     # autoload :Falafelhuset,        'lunchplaner/backends/falafelhuset' # Konkurs 2022-06-02
