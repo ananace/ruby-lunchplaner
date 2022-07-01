@@ -23,7 +23,7 @@ module Lunchplaner
 
       def links
         [
-          { href: 'https://falafelhuset.se/files/Alaaeddin/campusmeny.jpg', type: 'far file-image', colour: 'primary', title: 'Campus menyn' }
+          { href: 'https://ace-test.rgw.ctrl-c.liu.se/campusmenu.jpg', type: 'far file-image', colour: 'primary', title: 'Campus menyn' }
         ] + super
       end
     end

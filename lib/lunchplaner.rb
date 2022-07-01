@@ -19,7 +19,7 @@ module Lunchplaner
     autoload :Bores,               'lunchplaner/backends/bores' if Time.now > Time.parse('2022-07-24')
     autoload :BrodernasKok,        'lunchplaner/backends/brodernaskok'
     autoload :ChiliLime,           'lunchplaner/backends/chililime'
-    # autoload :Falafelhuset,        'lunchplaner/backends/falafelhuset' # Konkurs 2022-06-02
+    autoload :Falafelhuset,        'lunchplaner/backends/falafelhuset' # Konkurs 2022-06-02
     autoload :FreshMarket,         'lunchplaner/backends/fresh_market' if Time.now > Time.parse('2022-08-15')
     autoload :Husman,              'lunchplaner/backends/husman'
     autoload :Karallen,            'lunchplaner/backends/karallen' if Time.now > Time.parse('2022-08-15')
