@@ -17,6 +17,10 @@ module Lunchplaner
       @url ||= url
     end
 
+    def open?
+      true
+    end
+
     def url
       self.class.url
     end

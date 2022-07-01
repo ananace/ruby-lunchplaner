@@ -33,6 +33,7 @@ module Lunchplaner
       register Sinatra::Reloader
 
       also_reload 'lib/lunchplaner/backends/*.rb'
+      also_reload 'lib/lunchplaner/common/*.rb'
     end
 
     configure :development, :production do
@@ -53,14 +54,16 @@ module Lunchplaner
       Lunchplaner.all.map do |obj|
         c = obj.delete(:source)
         [c.class.demodularized.underscore, obj]
-      end.to_h.to_json
+      end.sort.to_h.to_json
     end
 
     get '/api/names/?' do
       content_type :json
       Lunchplaner::Backends.constants.map do |c|
+        next if !params['closed'] && !Backends.const_get(c).new.open?
+
         Lunchplaner::Backends.const_get(c).demodularized.underscore
-      end.to_json
+      end.compact.sort.to_json
     end
 
     get '/api/:backend/?' do |backend|
@@ -68,12 +71,12 @@ module Lunchplaner
       klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join(''))
       b = klass.new
 
-      b.all.merge(name: b.to_s, url: b.url, links: b.links, _methods: %w[url links name daily weekly all].map { |m| "/api/#{backend}/#{m}" }).to_json
+      b.all.merge(name: b.to_s, url: b.url, links: b.links, _methods: %w[open? url links name daily weekly all].map { |m| "/api/#{backend}/#{m}" }).to_json
     end
 
     get '/api/:backend/:method/?' do |backend, method|
       content_type :json
-      raise "Invalid action '#{method}'" unless %i[url links name daily weekly all].include?(method.to_s.to_sym)
+      raise "Invalid action '#{method}'" unless %i[open? url links name daily weekly all].include?(method.to_s.to_sym)
 
       klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join(''))
       b = klass.new

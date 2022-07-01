@@ -5,6 +5,10 @@ module Lunchplaner
     class FreshMarket < Lunchplaner::Backend
       url 'https://www.ostgotakok.se/freshmarket/#meny'
 
+      def open?
+        Time.now > Time.parse('2022-08-15')
+      end
+
       def to_s
         'Fresh Market by Östgötakök'
       end

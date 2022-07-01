@@ -7,6 +7,10 @@ module Lunchplaner
         data
       end
 
+      def open?
+        Time.parse('2022-06-23 23:59') >= Time.now || Time.now >= Time.parse('2022-08-15 00:00')
+      end
+
       protected
 
       def data

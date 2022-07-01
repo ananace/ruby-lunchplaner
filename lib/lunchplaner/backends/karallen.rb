@@ -5,6 +5,10 @@ module Lunchplaner
     class Karallen < Lunchplaner::Backend
       url 'https://www.compass-group.se/MatDryck/Restauranger/linkoping-malmslatt/linkopings-universitet/restauranger--cafeer/karallen/'
 
+      def open?
+        Time.now > Time.parse('2022-08-15')
+      end
+
       def to_s
         'Restaurang Kårallen'
       end

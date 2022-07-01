@@ -5,6 +5,10 @@ module Lunchplaner
     class Bores < Lunchplaner::Backend
       url 'https://bores.se/'
 
+      def open?
+        Time.now > Time.parse('2022-07-24')
+      end
+
       def map_search
         'BORES, Studievägen, Linköping'
       end
