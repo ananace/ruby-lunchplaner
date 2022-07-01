@@ -5,6 +5,10 @@ module Lunchplaner
     class Stangs < Lunchplaner::Backend
       url 'https://stangsmjardevi.se'
 
+      def open?
+        Time.parse('2022-07-09') > Time.now || Time.now > Time.parse('2022-08-08')
+      end
+
       def daily
         data[:daily]
       end
