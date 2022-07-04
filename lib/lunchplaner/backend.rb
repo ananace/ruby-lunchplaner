@@ -45,7 +45,9 @@ module Lunchplaner
     end
 
     def all
-      { daily: daily, weekly: weekly }
+      return { open: false } unless open?
+
+      { daily: daily, weekly: weekly, open: open? }
     end
 
     def to_s

@@ -10,9 +10,9 @@ module Lunchplaner
   def self.all
     Backends.constants.map do |r|
       obj = Backends.const_get(r).new
-      next unless obj.open?
+      # next unless obj.open?
 
-      (obj.all rescue { daily: ['N/A'], weekly: ['N/A'] }).merge(source: obj, name: obj.to_s, url: obj.url, links: obj.links)
+      (obj.all rescue { daily: ['N/A'], weekly: ['N/A'], open: false }).merge(source: obj, name: obj.to_s, url: obj.url, links: obj.links)
     end.compact
   end
 

@@ -23,8 +23,8 @@ end
 
 module Lunchplaner
   class API < Sinatra::Base
-    use Prometheus::Middleware::Collector
-    use Prometheus::Middleware::Exporter
+    # use Prometheus::Middleware::Collector
+    # use Prometheus::Middleware::Exporter
 
     set :public_folder, 'public'
 
@@ -53,6 +53,8 @@ module Lunchplaner
       content_type :json
       Lunchplaner.all.map do |obj|
         c = obj.delete(:source)
+        next if params['open'] && !c.open?
+
         [c.class.demodularized.underscore, obj]
       end.sort.to_h.to_json
     end
@@ -60,7 +62,7 @@ module Lunchplaner
     get '/api/names/?' do
       content_type :json
       Lunchplaner::Backends.constants.map do |c|
-        next if !params['closed'] && !Backends.const_get(c).new.open?
+        next if params['open'] && !Backends.const_get(c).new.open?
 
         Lunchplaner::Backends.const_get(c).demodularized.underscore
       end.compact.sort.to_json
@@ -71,12 +73,14 @@ module Lunchplaner
       klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join(''))
       b = klass.new
 
-      b.all.merge(name: b.to_s, url: b.url, links: b.links, _methods: %w[open? url links name daily weekly all].map { |m| "/api/#{backend}/#{m}" }).to_json
+      b.all.merge(name: b.to_s, url: b.url, links: b.links, _methods: %w[open url links name daily weekly all].map { |m| "/api/#{backend}/#{m}" }).to_json
     end
 
     get '/api/:backend/:method/?' do |backend, method|
       content_type :json
-      raise "Invalid action '#{method}'" unless %i[open? url links name daily weekly all].include?(method.to_s.to_sym)
+      raise "Invalid action '#{method}'" unless %i[open url links name daily weekly all].include?(method.to_s.to_sym)
+
+      method = "#{method}?" if method == 'open'
 
       klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join(''))
       b = klass.new
