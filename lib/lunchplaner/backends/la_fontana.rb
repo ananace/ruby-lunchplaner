@@ -6,11 +6,11 @@ module Lunchplaner
       url 'https://lafontanamjardevi.se/dagens-lunch/'
 
       def daily
-        data
+        data[:daily]
       end
 
       def weekly
-        %w[Pizza Sallad Kebab]
+        (data[:weekly] || []) + %w[Pizza Sallad Kebab]
       end
 
       def to_s
@@ -20,7 +20,26 @@ module Lunchplaner
       private
 
       def data
-        raw_data.css('.elementor-price-list-description')[Time.now.wday - 1].inner_html.split('<br>').map { |k| CGI.unescapeHTML(k).strip }
+        if raw_data.at_css('.elementor-price-list-title').text =~ /^måndag till fredag/i
+          entries = raw_data
+                    .at_css('.elementor-price-list-description + div')
+                    .css('div')
+                    .map { |e| e.text.strip.sub("\n", ' — ') }
+                    .reject(&:empty?)
+
+          { weekly: entries }
+        else
+          entries = raw_data
+                    .css('.elementor-price-list-description')
+                    .map do |entry|
+                      entry
+                        .inner_html
+                        .split('<br>')
+                        .map { |k| CGI.unescapeHTML(k).strip }
+                    end
+
+          { daily: entries[Time.now.wday - 1] }
+        end
       end
     end
   end
