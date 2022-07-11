@@ -30,8 +30,8 @@ module Lunchplaner
     autoload :SpicyWokNRoll,       'lunchplaner/backends/spicy_wok_n_roll'
     autoload :Stangs,              'lunchplaner/backends/stangs'
     autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben'
-    autoload :Zodiaken,            'lunchplaner/backends/zodiaken'
     autoload :VallastadensPizza,   'lunchplaner/backends/vallastadens_pizza'
+    autoload :Zodiaken,            'lunchplaner/backends/zodiaken'
   end
 
   module Common
