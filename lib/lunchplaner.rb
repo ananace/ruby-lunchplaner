@@ -31,6 +31,7 @@ module Lunchplaner
     autoload :Stangs,              'lunchplaner/backends/stangs'
     autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben'
     autoload :Zodiaken,            'lunchplaner/backends/zodiaken'
+    autoload :VallastadensPizza,   'lunchplaner/backends/vallastadens_pizza'
   end
 
   module Common
