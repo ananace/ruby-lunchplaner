@@ -5,6 +5,10 @@ module Lunchplaner
     class Husman < Lunchplaner::Backend
       url 'https://restauranghusman.se'
 
+      def open?
+        Time.now > Time.parse('2022-08-08')
+      end
+
       def links
         # The official download URL scheme; (The restaurant doesn't always follow it)
         # weeknum = Time.now.strftime('%W').to_i + 1

@@ -5,6 +5,10 @@ module Lunchplaner
     class SpicyWokNRoll < Lunchplaner::Backend
       url 'https://spicywoknroll.se/dagens-lunch'
 
+      def open?
+        Time.now > Time.parse('2022-07-25')
+      end
+
       def daily
         data[:daily]
       end
