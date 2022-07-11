@@ -21,7 +21,7 @@ module Lunchplaner
     autoload :Bores,               'lunchplaner/backends/bores'
     autoload :BrodernasKok,        'lunchplaner/backends/brodernaskok'
     autoload :ChiliLime,           'lunchplaner/backends/chililime'
-    autoload :Falafelhuset,        'lunchplaner/backends/falafelhuset' # Konkurs 2022-06-02
+    # autoload :Falafelhuset,        'lunchplaner/backends/falafelhuset' # Konkurs 2022-06-02
     autoload :FreshMarket,         'lunchplaner/backends/fresh_market'
     autoload :Husman,              'lunchplaner/backends/husman'
     autoload :Karallen,            'lunchplaner/backends/karallen'
