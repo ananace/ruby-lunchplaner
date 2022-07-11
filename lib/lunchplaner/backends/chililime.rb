@@ -5,6 +5,10 @@ module Lunchplaner
     class ChiliLime < Lunchplaner::Backend
       url 'http://chili-lime.se/'
 
+      def open?
+        Time.now > Time.parse('2022-08-08')
+      end
+
       def links
         [
           { href: 'http://chili-lime.se/helaveckan.asp', type: 'far calendar', colour: 'primary', title: 'Hela veckans meny' }
@@ -16,6 +20,8 @@ module Lunchplaner
           (e !~ /(FISK|INDISK|VEG|GRILL)/)
         end.map do |e|
           e.gsub(/[0-9A-Z]\. ?/, '')
+        end.reject do |e|
+          e.nil? || e.empty?
         end.map do |e|
           e[0].upcase + e[1..]
         end.select do |e|

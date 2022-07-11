@@ -24,7 +24,9 @@ var App = createApp({
     var paginated = this.hasQuery('num');
     var self = this;
 
-    var namepromise = axios.get('/api/names');
+    var open = this.hasQuery('open') ? "?open=true" : "";
+
+    var namepromise = axios.get('/api/names' + open);
 
     if (paginated) {
       namepromise.then(function(resp) {
@@ -63,7 +65,7 @@ var App = createApp({
         }
       });
 
-      axios.get('/api/all', { timeout: 750 })
+      axios.get('/api/all' + open, { timeout: 750 })
                          .then(function(resp) {
         console.log("Retrieved all data from cache");
         self.backends = resp.data;

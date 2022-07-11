@@ -56,7 +56,7 @@ module Lunchplaner
         next if params['open'] && !c.open?
 
         [c.class.demodularized.underscore, obj]
-      end.sort.to_h.to_json
+      end.compact.sort.to_h.to_json
     end
 
     get '/api/names/?' do
