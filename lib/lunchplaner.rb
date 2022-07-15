@@ -18,6 +18,7 @@ module Lunchplaner
 
   autoload :Backend, 'lunchplaner/backend'
   module Backends
+    autoload :Bestia,              'lunchplaner/backends/bestia'
     autoload :Bores,               'lunchplaner/backends/bores'
     autoload :BrodernasKok,        'lunchplaner/backends/brodernaskok'
     autoload :ChiliLime,           'lunchplaner/backends/chililime'
