@@ -9,7 +9,7 @@ module Lunchplaner
   class Backend
     WEEKDAYS = %w[Söndag Måndag Tisdag Onsdag Torsdag Fredag Lördag Söndag].freeze
     MONTHS = %w[nil Januari Februari Mars April Maj Juni Juli Augusti September Oktober November December].freeze
-    DAY_REX = /måndag|tisdag|onsdag|torsdag|fredag|lördag|söndag/i.freeze
+    DAY_REX = /måndag|tisdag|onsdag|torsdag|fredag|lördag|söndag/i
     LATIN1_DETECT = "\xc3\x83\xc2\xa5"
     LATIN1_DETECT2 = "\xc3\x83\xc2\x85" # UTF-8 encoded latin-1
 

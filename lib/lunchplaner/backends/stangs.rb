@@ -34,32 +34,22 @@ module Lunchplaner
             table: 'mealofthedays',
             condition: {
               workday: {
-                '$gte': Time.now.strftime('%Y-%m-%d'),
-                '$lte': Time.now.strftime('%Y-%m-%d')
+                '$lte': Time.now.strftime('%Y-%m-%d'), '$gte': Time.now.strftime('%Y-%m-%d')
               }
             }
           }
           u = URI('https://db20.bokad.se/find')
           data = Net::HTTP.post(u, q.to_json, { 'Content-Type' => 'application/json' })
-          data.value
-
           daily = data.body
 
           q[:table] = 'products'
           q[:condition] = {
             id: {
-              '$in': %w[
-                724424a0-f7f8-4ecf-9569-9f828163ff66
-                4323000c-6aa1-4724-8dfe-231be5521a2e
-                5d09056e-97ee-449d-9efa-36dbc648b26c
-                0bfae91e-be52-4db8-b098-24248a728af7
-              ]
+              '$in': %w[724424a0-f7f8-4ecf-9569-9f828163ff66 4323000c-6aa1-4724-8dfe-231be5521a2e 5d09056e-97ee-449d-9efa-36dbc648b26c 0bfae91e-be52-4db8-b098-24248a728af7]
             }
           }
 
           data = Net::HTTP.post(u, q.to_json, { 'Content-Type' => 'application/json' })
-          data.value
-
           weekly = data.body
 
           {

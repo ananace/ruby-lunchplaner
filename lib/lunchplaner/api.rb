@@ -70,7 +70,7 @@ module Lunchplaner
 
     get '/api/:backend/?' do |backend|
       content_type :json
-      klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join(''))
+      klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join)
       b = klass.new
 
       b.all.merge(name: b.to_s, url: b.url, links: b.links, _methods: %w[open url links name daily weekly all].map { |m| "/api/#{backend}/#{m}" }).to_json
@@ -82,7 +82,7 @@ module Lunchplaner
 
       method = "#{method}?" if method == 'open'
 
-      klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join(''))
+      klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join)
       b = klass.new
       b.send(method.to_s.to_sym).to_json
     end

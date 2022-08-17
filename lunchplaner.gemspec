@@ -13,10 +13,9 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'http://gitlab.liu.se/aleol57/lunchplaner'
   spec.license       = 'MIT'
 
-  spec.required_ruby_version = '>= 2.6'
+  spec.required_ruby_version = '>= 3.0'
 
   spec.files         = `git ls-files -z`.split("\x0")
-  spec.test_files    = spec.files.grep(%r{^test/})
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.bindir        = 'bin'
   spec.require_paths = ['lib']
