@@ -6,7 +6,7 @@ module Lunchplaner
       url 'https://www.compass-group.se/MatDryck/Restauranger/linkoping-malmslatt/linkopings-universitet/restauranger--cafeer/karallen/'
 
       def open?
-        Time.now > Time.parse('2022-08-15')
+        Time.now > Time.parse('2022-08-22') && !data.nil?
       end
 
       def to_s
@@ -31,8 +31,14 @@ module Lunchplaner
       end
 
       def data
-        blocks = raw_data.css('#week-content .container-fluid.no-print')
-        blocks.find { |b| b.at_css('.day-current') }.css('.day-alternative span').map(&:text)
+        days = raw_data.css('#week-content .container-fluid.no-print').map do |b|
+          {
+            day: b.at_css('.day-date span').attribute('js-date').value,
+            meals: b.css('.day-alternative span').map(&:text)
+          }
+        end
+
+        days.find { |d| d[:day] == Time.now.strftime('%Y-%m-%d') }&.[](:meals)
       end
     end
   end
