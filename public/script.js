@@ -48,6 +48,7 @@ var App = createApp({
                .then(function(resp) {
             console.log("Retrieved data for " + backend);
             self.backends[backend] = Object.assign(self.backends[backend], resp.data);
+            self.backends[backend].loaded = true;
           }).catch(function(error) {
             self.setError(backend, error);
           }));
@@ -69,6 +70,9 @@ var App = createApp({
                          .then(function(resp) {
         console.log("Retrieved all data from cache");
         self.backends = resp.data;
+        for (it in self.backends) {
+          self.backends[it].loaded = true;
+        }
         self.reloadLayout();
       }).catch(function(_) {
         console.log("Full retrieval timed out, running per-entry");
@@ -78,6 +82,7 @@ var App = createApp({
             promises.push(axios.get('/api/' + backend).then(function(resp) {
               console.log("Retrieved data for " + backend);
               self.backends[backend] = resp.data;
+              self.backends[backend].loaded = true;
             }).catch(function(error) {
               self.setError(backend, error);
             }));

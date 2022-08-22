@@ -18,13 +18,15 @@ module Lunchplaner
         correct_week ||= raw_data
 
         items = correct_week.css('.menu-container .menu-col .menu-item')
+        return nil unless items.any?
+
         day = Time.now.wday - 1
         broken_encoding = items.any? do |item|
           item.content.include?(Lunchplaner::Backend::LATIN1_DETECT) ||
             item.content.include?(Lunchplaner::Backend::LATIN1_DETECT2)
         end
 
-        return [] if day.negative? || day > 4
+        return nil if day.negative? || day > 4
 
         content = items[day].content
         content = content.encode('ISO-8859-1', 'UTF-8').tap { |c| c.force_encoding('UTF-8') } if broken_encoding
