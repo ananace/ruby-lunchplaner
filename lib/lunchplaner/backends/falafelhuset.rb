@@ -3,7 +3,7 @@
 module Lunchplaner
   module Backends
     class Falafelhuset < Lunchplaner::Backend
-      url 'https://falafelhuset.se/'
+      url 'https://falafelhusetuniversitet.business.site/'
 
       def weekly
         [
