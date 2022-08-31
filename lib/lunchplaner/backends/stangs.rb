@@ -65,6 +65,7 @@ module Lunchplaner
         end
 
         data = raw_data[:daily].dup
+        data.delete_if { |d| d[:name].downcase.start_with?('avh:') }
 
         name = data.first[:name]
         daily = map_entry.call(data.first)
@@ -85,6 +86,8 @@ module Lunchplaner
         end
 
         data = raw_data[:weekly].reverse
+        data.delete_if { |d| d[:name].downcase.start_with?('avh:') }
+
         weekly += data.reject { |d| d[:description].empty? }.map(&map_entry)
 
         { daily: [daily, daily_veg], weekly: weekly }
