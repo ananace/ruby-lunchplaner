@@ -27,9 +27,7 @@ module Lunchplaner
         daily << "#{strings.shift} - #{strings.shift}"
         daily << "#{strings.shift} - #{strings.shift}"
         weekly = []
-        until strings.empty?
-          weekly << "#{strings.shift} - #{strings.shift}"
-        end
+        weekly << "#{strings.shift} - #{strings.shift}" until strings.empty?
 
         { daily: daily, weekly: weekly }
       end
