@@ -28,7 +28,7 @@ module Lunchplaner
     autoload :Husman,              'lunchplaner/backends/husman'
     autoload :Karallen,            'lunchplaner/backends/karallen'
     autoload :LaFontana,           'lunchplaner/backends/la_fontana'
-    # autoload :P2g,                 'lunchplaner/backends/p2g'
+    autoload :PegsAndTails,        'lunchplaner/backends/pegs_and_tails'
     autoload :SpicyWokNRoll,       'lunchplaner/backends/spicy_wok_n_roll'
     autoload :Stangs,              'lunchplaner/backends/stangs'
     autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben'
