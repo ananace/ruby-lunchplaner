@@ -20,14 +20,30 @@ module Lunchplaner
       private
 
       def data
-        sections = raw_data.css('section.sektion2 > div > div > .elementor-widget-wrap.elementor-element-populated > section:not(.elementor-hidden-desktop)')
-        strings = sections.map { |b| b.text.sub(/\d+:-/, '').strip }.reject(&:empty?)
+        sections = raw_data.css('section.sektion2 > div > div > .elementor-widget-wrap.elementor-element-populated > *')
 
         daily = []
-        daily << "#{strings.shift} - #{strings.shift}"
-        daily << "#{strings.shift} - #{strings.shift}"
         weekly = []
-        weekly << "#{strings.shift} - #{strings.shift}" until strings.empty?
+
+        cur = []
+        target = 0
+        sections.each do |sect|
+          if sect.name == 'div'
+            target += 1 if sect.classes.include? 'elementor-widget-divider'
+          elsif sect.classes.include? 'elementor-hidden-desktop'
+            cur = cur.reject(&:empty?).compact
+            next if cur.empty?
+
+            if target == 1
+              daily << cur.join(' - ')
+            else
+              weekly << cur.join(' - ')
+            end
+            cur = []
+          else
+            cur << sect.text.sub(/\d+:-/, '').strip
+          end
+        end
 
         { daily: daily, weekly: weekly }
       end
