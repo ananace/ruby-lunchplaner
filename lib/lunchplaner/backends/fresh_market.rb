@@ -18,34 +18,26 @@ module Lunchplaner
       end
 
       def daily
-        [
-          'Vegetarisk Lunchbuffé - animaliskt protein finns'
-        ]
+        today = [data].compact
+        return today unless today.empty?
+
+        nil
+      end
+
+      def weekly
+        ['Vegetarisk Lunchbuffé - animaliskt protein finns']
       end
 
       private
 
       def data
-        content = raw_data.at_css('.menu--left-content > .overflow').content.split("\n").map(&:strip)
+        content = raw_data.at_css('.w1200--content').content.split("\n").map(&:strip)
+
         curday = WEEKDAYS[Time.now.wday]
         index = content.index(curday)
-        if index
-          content[index + 1, 2]
-        else
-          raw_data.at_css('.menu--left-content > .overflow').css('p').each do |e|
-            next if e.content.strip.empty?
+        return content[index + 1] if index
 
-            bold = e.at_css('b')
-            next unless bold
-            next unless bold.content.include?(curday)
-
-            return e.text
-                    .sub(DAY_REX, '')
-                    .split("\n")
-                    .map(&:strip)
-                    .reject(&:empty?)
-          end
-        end
+        nil
       end
     end
   end
