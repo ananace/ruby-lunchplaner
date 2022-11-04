@@ -61,19 +61,24 @@ module Lunchplaner
 
       def data
         map_entry = proc do |entry|
-          "#{entry[:name][0]}#{entry[:name][1..].downcase.strip} - #{entry[:description].strip}"
+          name = entry[:name]
+          "#{name[0]}#{name[1..].downcase.strip} - #{entry[:description].strip}"
         end
 
         data = raw_data[:daily].dup
-        data.delete_if { |d| d[:name].downcase.start_with?('avh:') }
+        data.delete_if { |d| d[:name].downcase.include?('avh:') }
+        data.each do |d|
+          d[:name].sub!(/dagens (rätt|grönt)/i, '')
+          d[:name].strip!
+        end
 
         name = data.first[:name]
         daily = map_entry.call(data.first)
-        data.delete_if { |d| d[:name].downcase.start_with?(name.downcase) }
+        data.delete_if { |d| d[:name].downcase.include?(name.downcase) }
 
         name = data.first[:name]
         daily_veg = map_entry.call(data.first)
-        data.delete_if { |d| d[:name].downcase.start_with?(name.downcase) }
+        data.delete_if { |d| d[:name].downcase.include?(name.downcase) }
 
         weekly = []
         loop do
