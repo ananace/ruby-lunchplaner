@@ -68,7 +68,7 @@ module Lunchplaner
         data = raw_data[:daily].dup
         data.delete_if { |d| d[:name].downcase.include?('avh:') }
         data.each do |d|
-          d[:name].sub!(/dagens (rätt|grönt)/i, '')
+          d[:name].sub!(/dagens ?(rätt|grön[at])?:?/i, '')
           d[:name].strip!
         end
 
