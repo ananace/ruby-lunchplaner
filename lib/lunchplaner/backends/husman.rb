@@ -14,7 +14,7 @@ module Lunchplaner
       end
 
       def daily
-        data.css('.jet-listing .e-con-full .e-con-boxed > .e-con-inner > .e-con-boxed span.elementor-heading-title').reject { |e| e.content =~ /V.lkommen!/ }.map do |e|
+        data.css('.jedv-enabled--yes div.e-con-full:not(.elementor-hidden-mobile) span.elementor-heading-title.elementor-size-default').map do |e|
           e.content.strip.delete "\n"
         end
       end
