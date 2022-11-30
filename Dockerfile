@@ -1,6 +1,6 @@
-FROM docker.io/ruby:latest
+FROM docker.io/ruby:alpine
 
-RUN apt-get update -qq && apt-get install -y build-essential
+RUN apk add --no-cache g++ make
 
 ENV APP_HOME /app
 ENV RACK_ENV production
