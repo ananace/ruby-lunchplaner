@@ -29,7 +29,7 @@ rubocop:
 
 push:image:
   stage: push
-  image: quay.io/containers/buildah
+  image: quay.io/buildah/stable
   script:
     - buildah bud --tag "$CI_REGISTRY_IMAGE" --file "${CI_PROJECT_DIR}/Dockerfile" $CI_PROJECT_DIR
     - buildah push --creds "${CI_REGISTRY_USER}:${CI_JOB_TOKEN}" "$CI_REGISTRY_IMAGE" "docker://${CI_REGISTRY_IMAGE}"
