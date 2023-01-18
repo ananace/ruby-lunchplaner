@@ -88,6 +88,9 @@ push:image:
               ports:
               - containerPort: 9292
                 protocol: TCP
+              livenessProbe:
+                tcpSocket:
+                  port: 9292
               readinessProbe:
                 tcpSocket:
                   port: 9292
