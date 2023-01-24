@@ -8,6 +8,7 @@ require 'open-uri'
 module Lunchplaner
   class Backend
     WEEKDAYS = %w[Söndag Måndag Tisdag Onsdag Torsdag Fredag Lördag Söndag].freeze
+    WEEKDAYS_EN = %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday Sunday].freeze
     MONTHS = %w[nil Januari Februari Mars April Maj Juni Juli Augusti September Oktober November December].freeze
     DAY_REX = /måndag|tisdag|onsdag|torsdag|fredag|lördag|söndag/i
     LATIN1_DETECT = "\xc3\x83\xc2\xa5"

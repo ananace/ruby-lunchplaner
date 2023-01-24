@@ -14,27 +14,22 @@ module Lunchplaner
       protected
 
       def data
-        correct_week = raw_data.at_css('#current')
-        correct_week ||= raw_data
+        correct_week = raw_data.at_css('#current') || raw_data
+        items = correct_week.at_css('.menu-container .menu-col')
+        return nil unless items
 
-        items = correct_week.css('.menu-container .menu-col .menu-item')
-        return nil unless items.any?
-
-        day = Time.now.wday - 1
-        broken_encoding = items.any? do |item|
-          item.content.include?(Lunchplaner::Backend::LATIN1_DETECT) ||
-            item.content.include?(Lunchplaner::Backend::LATIN1_DETECT2)
-        end
-
+        day = Time.now.wday
         return nil if day.negative? || day > 4
 
-        content = items[day].content
-        content = content.encode('ISO-8859-1', 'UTF-8').tap { |c| c.force_encoding('UTF-8') } if broken_encoding
-        content.strip
-               .split("\n")
-               .reject { |c| c.gsub(Lunchplaner::Backend::DAY_REX, '').strip.empty? }
-               .reject { |c| c.length < 5 }
-               .map(&:strip)
+        broken_encoding = items.content.include?(Lunchplaner::Backend::LATIN1_DETECT) ||
+                          items.content.include?(Lunchplaner::Backend::LATIN1_DETECT2)
+
+        wday = Lunchplaner::Backend::WEEKDAYS_EN[day].downcase
+        content = items.css(".#{wday} p").map(&:content)
+        content = items.css(".menu-item:nth-child(#{day}) p").map(&:content) if content.empty?
+
+        content.map! { |c| c.encode('ISO-8859-1', 'UTF-8').tap { |mc| mc.force_encoding('UTF-8') } } if broken_encoding
+        content.map(&:strip)
       end
     end
   end
