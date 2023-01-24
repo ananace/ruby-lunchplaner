@@ -26,14 +26,13 @@ var App = createApp({
 
     var open = this.hasQuery('open') ? "?open=true" : "";
 
-    var namepromise = axios.get('/api/names' + open);
+    var restpromise = axios.get('/api/restaurants' + open);
 
     if (paginated) {
-      namepromise.then(function(resp) {
+      restpromise.then(function(resp) {
         var names = []
         for (it in resp.data) {
-          let name = resp.data[it];
-          names.push(name);
+          names.push(it);
         }
         names.sort();
 
@@ -44,7 +43,9 @@ var App = createApp({
         names = names.slice(page * perPage, (page * perPage) + perPage);
         names.forEach(function(backend) {
           self.backends[backend] = {};
-          promises.push(axios.get('/api/' + backend)
+          self.backends[backend] = Object.assign(self.backends[backend], resp.data[backend]);
+
+          promises.push(axios.get('/api/restaurant/' + backend)
                .then(function(resp) {
             console.log("Retrieved data for " + backend);
             self.backends[backend] = Object.assign(self.backends[backend], resp.data);
@@ -57,13 +58,8 @@ var App = createApp({
         Promise.allSettled(promises).then(function() { self.reloadLayout(); });
       });
     } else {
-      namepromise.then(function(resp) {
-        for (it in resp.data) {
-          let name = resp.data[it];
-          if (!self.backends[name]) {
-            self.backends[name] = {};
-          }
-        }
+      restpromise.then(function(resp) {
+        self.backends = resp.data;
       });
 
       axios.get('/api/all' + open, { timeout: 750 })
@@ -76,10 +72,10 @@ var App = createApp({
         self.reloadLayout();
       }).catch(function(_) {
         console.log("Full retrieval timed out, running per-entry");
-        namepromise.then(function() {
+        restpromise.then(function() {
           var promises = []
           Object.keys(self.backends).forEach(function(backend) {
-            promises.push(axios.get('/api/' + backend).then(function(resp) {
+            promises.push(axios.get('/api/restaurant/' + backend).then(function(resp) {
               console.log("Retrieved data for " + backend);
               self.backends[backend] = resp.data;
               self.backends[backend].loaded = true;

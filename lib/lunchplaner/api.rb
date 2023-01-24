@@ -59,24 +59,36 @@ module Lunchplaner
       end.compact.sort.to_h.to_json
     end
 
-    get '/api/names/?' do
+    get '/api/restaurants/?' do
       content_type :json
       Lunchplaner::Backends.constants.map do |c|
-        next if params['open'] && !Backends.const_get(c).new.open?
+        r = Backends.const_get(c).new
+        next if params['open'] && !r.open?
 
-        Lunchplaner::Backends.const_get(c).demodularized.underscore
-      end.compact.sort.to_json
+        [
+          r.class.demodularized.underscore,
+          restaurant_info(r)
+        ]
+      end.compact.to_h.to_json
     end
 
-    get '/api/:backend/?' do |backend|
+    get '/api/restaurant/:backend/?' do |backend|
       content_type :json
       klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join)
       b = klass.new
 
-      b.all.merge(name: b.to_s, url: b.url, links: b.links, _methods: %w[open url links name daily weekly all].map { |m| "/api/#{backend}/#{m}" }).to_json
+      b.all.merge(restaurant_info(b)).to_json
     end
 
-    get '/api/:backend/:method/?' do |backend, method|
+    get '/api/restaurant/:backend/info/?' do |backend|
+      content_type :json
+      klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join)
+      b = klass.new
+
+      restaurant_info(b).to_json
+    end
+
+    get '/api/restaurant/:backend/:method/?' do |backend, method|
       content_type :json
       raise "Invalid action '#{method}'" unless %i[open url links name daily weekly all].include?(method.to_s.to_sym)
 
@@ -85,6 +97,18 @@ module Lunchplaner
       klass = Lunchplaner::Backends.const_get(backend.split('_').map(&:capitalize).join)
       b = klass.new
       b.send(method.to_s.to_sym).to_json
+    end
+
+    private
+
+    def restaurant_info(rest)
+      {
+        name: rest.to_s,
+        open: rest.open?,
+        url: rest.url,
+        links: rest.links,
+        _methods: %w[info name open url links daily weekly all].map { |m| "/api/restaurant/#{rest.class.demodularized.underscore}/#{m}" }
+      }
     end
   end
 end
