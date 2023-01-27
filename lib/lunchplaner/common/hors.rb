@@ -19,7 +19,7 @@ module Lunchplaner
         return nil unless items
 
         day = Time.now.wday
-        return nil if day.negative? || day > 4
+        return nil if day.zero? || day > 5
 
         broken_encoding = items.content.include?(Lunchplaner::Backend::LATIN1_DETECT) ||
                           items.content.include?(Lunchplaner::Backend::LATIN1_DETECT2)
