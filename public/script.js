@@ -42,13 +42,12 @@ var App = createApp({
         var promises = []
         names = names.slice(page * perPage, (page * perPage) + perPage);
         names.forEach(function(backend) {
-          self.backends[backend] = {};
-          self.backends[backend] = Object.assign(self.backends[backend], resp.data[backend]);
+          self.backends[backend] = resp.data[backend];
 
           promises.push(axios.get('/api/restaurant/' + backend)
                .then(function(resp) {
             console.log("Retrieved data for " + backend);
-            self.backends[backend] = Object.assign(self.backends[backend], resp.data);
+            self.backends[backend] = resp.data;
             self.backends[backend].loaded = true;
           }).catch(function(error) {
             self.setError(backend, error);
@@ -59,7 +58,16 @@ var App = createApp({
       });
     } else {
       restpromise.then(function(resp) {
-        self.backends = resp.data;
+        var loaded = false;
+        for (it in self.backends) {
+          if (self.backends[it].loaded) {
+            loaded = true;
+          }
+        }
+
+        if (!loaded) {
+          self.backends = resp.data;
+        }
       });
 
       axios.get('/api/all' + open, { timeout: 750 })
@@ -81,10 +89,8 @@ var App = createApp({
               self.backends[backend].loaded = true;
             }).catch(function(error) {
               self.setError(backend, error);
-            }));
+            }).then(function() { self.reloadLayout(); }));
           });
-
-          Promise.allSettled(promises).then(function() { self.reloadLayout(); });
         });
       });
     }
