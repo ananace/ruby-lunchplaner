@@ -29,7 +29,11 @@ module Lunchplaner
         content = items.css(".menu-item:nth-child(#{day}) p").map(&:content) if content.empty?
 
         content.map! { |c| c.encode('ISO-8859-1', 'UTF-8').tap { |mc| mc.force_encoding('UTF-8') } } if broken_encoding
-        content.map(&:strip)
+        content.map!(&:strip)
+
+        return nil if content.empty?
+
+        content
       end
     end
   end
