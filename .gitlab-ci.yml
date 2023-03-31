@@ -50,7 +50,7 @@ push:image:
     - |
       # Deploy environment with kubectl apply
 
-      kubectl apply --server-side -f - <<EOF
+      kubectl apply --server-side --force-conflicts -f - <<EOF
       ---
       apiVersion: apps/v1
       kind: Deployment
@@ -72,9 +72,9 @@ push:image:
         template:
           metadata:
             annotations:
+              prometheus.io/port: "9292"
+              prometheus.io/scrape: "true"
               se.liu.gitlab/commit: $CI_COMMIT_SHA
-              # prometheus.io/port: "9292"
-              # prometheus.io/scrape: "true"
               app.gitlab.com/app: $CI_PROJECT_PATH_SLUG
               app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
             labels:
@@ -124,7 +124,7 @@ push:image:
     - |
       # Deploy production ingress only on the production environment
 
-      [ "$CI_ENVIRONMENT_SLUG" == "production" ] && kubectl apply --server-side -f - <<EOF || true
+      [ "$CI_ENVIRONMENT_SLUG" == "production" ] && kubectl apply --server-side --force-conflicts -f - <<EOF || true
       ---
       # Publicly accessible ingress
       apiVersion: networking.k8s.io/v1
