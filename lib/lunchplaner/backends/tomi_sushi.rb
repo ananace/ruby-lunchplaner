@@ -21,6 +21,10 @@ module Lunchplaner
         'Tomi Sushi'
       end
 
+      def open?
+        !Time.now.monday?
+      end
+
       def links
         [
           { href: 'https://ace-test.rgw.ctrl-c.liu.se/tomi_sushi.jpg', type: 'far file-image', colour: 'primary', title: 'Lunch menyn' }
