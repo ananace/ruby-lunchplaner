@@ -4,7 +4,7 @@ stages:
   - push
   - deploy
 
-image: "ruby:2.6"
+image: "ruby"
 
 # Cache gems in between builds
 cache:
