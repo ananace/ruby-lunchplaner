@@ -6,7 +6,7 @@ module Lunchplaner
       url 'https://www.ostgotakok.se/freshmarket/#meny'
 
       def open?
-        Time.now > Time.parse('2022-08-15')
+        Time.now > Time.parse('2023-08-15')
       end
 
       def to_s
