@@ -90,8 +90,9 @@ push:image:
                 protocol: TCP
                 name: web
               livenessProbe:
-                tcpSocket:
+                httpGet:
                   port: 9292
+                  path: '/healthz'
               readinessProbe:
                 tcpSocket:
                   port: 9292
