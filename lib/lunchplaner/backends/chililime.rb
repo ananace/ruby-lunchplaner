@@ -51,7 +51,7 @@ module Lunchplaner
 
       def data
         raw_data.at_css('.rubrik:first').parent.css('p')[2].to_s.split('<br>')[1..-2].map do |e|
-          CGI.unescapeHTML(e.strip.gsub(/\r\n/, ' ').gsub(/\s+/, ' ')).encode 'utf-8'
+          CGI.unescapeHTML(e.strip.gsub("\r\n", ' ').gsub(/\s+/, ' ')).encode 'utf-8'
         end
       end
     end
