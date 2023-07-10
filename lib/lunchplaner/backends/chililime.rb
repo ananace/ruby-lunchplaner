@@ -6,7 +6,7 @@ module Lunchplaner
       url 'http://chili-lime.se/'
 
       def open?
-        Time.now > Time.parse('2022-08-08')
+        Time.now > Time.parse('2023-08-06')
       end
 
       def links

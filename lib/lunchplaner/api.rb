@@ -7,7 +7,7 @@ require 'prometheus/middleware/exporter'
 
 class String
   def underscore
-    gsub(/::/, '/')
+    gsub('::', '/')
       .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
       .gsub(/([a-z])([A-Z])/, '\1_\2')
       .tr('-', '_')
