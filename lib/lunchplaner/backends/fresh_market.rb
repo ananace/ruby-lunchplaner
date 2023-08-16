@@ -3,7 +3,7 @@
 module Lunchplaner
   module Backends
     class FreshMarket < Lunchplaner::Backend
-      url 'https://www.ostgotakok.se/freshmarket/#meny'
+      url 'https://freshmarket.ostgotakok.se/lunchmeny/'
 
       def open?
         Time.now > Time.parse('2023-08-15')
@@ -31,13 +31,8 @@ module Lunchplaner
       private
 
       def data
-        content = raw_data.at_css('.w1200--content').content.split("\n").map(&:strip)
-
-        curday = WEEKDAYS[Time.now.wday]
-        index = content.index(curday)
-        return content[index + 1] if index
-
-        nil
+        content = raw_data.at_css('#menyblock').css('h4').map { |h4| h4.content.strip }
+        content[Time.now.wday - 1]
       end
     end
   end
