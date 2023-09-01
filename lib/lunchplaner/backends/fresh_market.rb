@@ -31,7 +31,7 @@ module Lunchplaner
       private
 
       def data
-        content = raw_data.at_css('#menyblock').css('h4').map { |h4| h4.content.strip }
+        content = raw_data.at_css('#menyblock').css('h3 ~ p, h4 ~ p').map(&:content)
         content[Time.now.wday - 1]
       end
     end
