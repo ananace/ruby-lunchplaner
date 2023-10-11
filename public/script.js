@@ -70,27 +70,18 @@ var App = createApp({
         }
       });
 
-      axios.get('/api/all' + open, { timeout: 750 })
-                         .then(function(resp) {
-        console.log("Retrieved all data from cache");
-        self.backends = resp.data;
-        for (it in self.backends) {
-          self.backends[it].loaded = true;
-        }
-        self.reloadLayout();
-      }).catch(function(_) {
-        console.log("Full retrieval timed out, running per-entry");
-        restpromise.then(function() {
-          var promises = []
-          Object.keys(self.backends).forEach(function(backend) {
-            promises.push(axios.get('/api/restaurant/' + backend).then(function(resp) {
-              console.log("Retrieved data for " + backend);
-              self.backends[backend] = resp.data;
-              self.backends[backend].loaded = true;
-            }).catch(function(error) {
-              self.setError(backend, error);
-            }).then(function() { self.reloadLayout(); }));
-          });
+      restpromise.then(function() {
+        var promises = []
+        Object.keys(self.backends).forEach(function(backend) {
+          promises.push(axios.get('/api/restaurant/' + backend).then(function(resp) {
+            console.log("Retrieved data for " + backend);
+            self.backends[backend] = resp.data;
+            self.backends[backend].loaded = true;
+          }).catch(function(error) {
+            self.setError(backend, error);
+          }).then(function() {
+            self.reloadLayout();
+          }));
         });
       });
     }
