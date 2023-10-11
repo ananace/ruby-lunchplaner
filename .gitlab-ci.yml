@@ -61,6 +61,7 @@ push:image:
         labels:
           app.kubernetes.io/name: lunchplaner
           app.kubernetes.io/component: frontend
+          app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
         name: lunchplaner-frontend
       spec:
         replicas: 2
@@ -113,9 +114,10 @@ push:image:
         labels:
           app.kubernetes.io/name: lunchplaner
           app.kubernetes.io/component: backend
+          app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
         name: lunchplaner-backend
       spec:
-        replicas: 2
+        replicas: 1
         revisionHistoryLimit: 1
         selector:
           matchLabels:
@@ -162,6 +164,7 @@ push:image:
         labels:
           app.kubernetes.io/name: lunchplaner
           app.kubernetes.io/component: frontend
+          app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
         name: lunchplaner-frontend
       spec:
         ports:
@@ -180,6 +183,7 @@ push:image:
         labels:
           app.kubernetes.io/name: lunchplaner
           app.kubernetes.io/component: backend
+          app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
         name: lunchplaner-backend
       spec:
         ports:
@@ -275,10 +279,12 @@ push:image:
   image: boxboat/kubectl
   before_script: []
   script:
-    - kubectl delete deploy ${CI_ENVIRONMENT_SLUG}-lunchplaner
-    - kubectl delete svc ${CI_ENVIRONMENT_SLUG}-lunchplaner
-    # Only exists on production environment, so failed deletion is not an error
-    - kubectl delete ingress ${CI_ENVIRONMENT_SLUG}-lunchplaner || true
+    - kubectl delete deploy -l "app.gitlab.com/env=${CI_ENVIRONMENT_SLUG}"
+    - kubectl delete svc -l "app.gitlab.com/env=${CI_ENVIRONMENT_SLUG}"
+    - |
+      # Only delete ingress on production environment
+      [ "$CI_ENVIRONMENT_SLUG" == "production" ] && \
+        kubectl delete ingress lunchplaner || true
   variables:
     GIT_STRATEGY: none
 
