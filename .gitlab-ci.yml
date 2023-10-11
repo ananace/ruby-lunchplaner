@@ -59,16 +59,16 @@ push:image:
           app.gitlab.com/app: $CI_PROJECT_PATH_SLUG
           app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
         labels:
-          app: lunchplaner
-          environment: $CI_ENVIRONMENT_SLUG
-        name: ${CI_ENVIRONMENT_SLUG}-lunchplaner
+          app.kubernetes.io/name: lunchplaner
+          app.kubernetes.io/component: frontend
+        name: lunchplaner-frontend
       spec:
-        replicas: 1
+        replicas: 2
         revisionHistoryLimit: 1
         selector:
           matchLabels:
-            app: lunchplaner
-            environment: $CI_ENVIRONMENT_SLUG
+            app.kubernetes.io/name: lunchplaner
+            app.kubernetes.io/component: frontend
         template:
           metadata:
             annotations:
@@ -78,8 +78,60 @@ push:image:
               app.gitlab.com/app: $CI_PROJECT_PATH_SLUG
               app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
             labels:
-              app: lunchplaner
-              environment: $CI_ENVIRONMENT_SLUG
+              app.kubernetes.io/name: lunchplaner
+              app.kubernetes.io/component: frontend
+          spec:
+            containers:
+            - image: $CI_REGISTRY_IMAGE
+              imagePullPolicy: Always
+              name: lunchplaner
+              ports:
+              - containerPort: 9292
+                protocol: TCP
+                name: web
+              livenessProbe:
+                httpGet:
+                  port: 9292
+                  path: '/healthz'
+              readinessProbe:
+                tcpSocket:
+                  port: 9292
+              resources:
+                limits:
+                  cpu: 100m
+                  memory: 80Mi
+                requests:
+                  cpu: 100m
+                  memory: 80Mi
+      ---
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        annotations:
+          app.gitlab.com/app: $CI_PROJECT_PATH_SLUG
+          app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
+        labels:
+          app.kubernetes.io/name: lunchplaner
+          app.kubernetes.io/component: backend
+        name: lunchplaner-backend
+      spec:
+        replicas: 2
+        revisionHistoryLimit: 1
+        selector:
+          matchLabels:
+            app.kubernetes.io/name: lunchplaner
+            app.kubernetes.io/component: backend
+        template:
+          metadata:
+            annotations:
+              prometheus.io/port: "9292"
+              prometheus.io/scrape: "true"
+              se.liu.gitlab/commit: $CI_COMMIT_SHA
+              app.gitlab.com/app: $CI_PROJECT_PATH_SLUG
+              app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
+            labels:
+              app.kubernetes.io/name: lunchplaner
+              app.kubernetes.io/component: backend
           spec:
             containers:
             - image: $CI_REGISTRY_IMAGE
@@ -108,9 +160,9 @@ push:image:
       kind: Service
       metadata:
         labels:
-          app: lunchplaner
-          environment: $CI_ENVIRONMENT_SLUG
-        name: ${CI_ENVIRONMENT_SLUG}-lunchplaner
+          app.kubernetes.io/name: lunchplaner
+          app.kubernetes.io/component: frontend
+        name: lunchplaner-frontend
       spec:
         ports:
         - name: web
@@ -118,8 +170,26 @@ push:image:
           protocol: TCP
           targetPort: 9292
         selector:
-          app: lunchplaner
-          environment: $CI_ENVIRONMENT_SLUG
+          app.kubernetes.io/name: lunchplaner
+          app.kubernetes.io/component: frontend
+        type: ClusterIP
+      ---
+      apiVersion: v1
+      kind: Service
+      metadata:
+        labels:
+          app.kubernetes.io/name: lunchplaner
+          app.kubernetes.io/component: backend
+        name: lunchplaner-backend
+      spec:
+        ports:
+        - name: web
+          port: 80
+          protocol: TCP
+          targetPort: 9292
+        selector:
+          app.kubernetes.io/name: lunchplaner
+          app.kubernetes.io/component: backend
         type: ClusterIP
       EOF
     - |
@@ -135,10 +205,9 @@ push:image:
           kubernetes.io/ingress.class: nginx-public
           kubernetes.io/tls-acme: "true"
           traefik.ingress.kubernetes.io/router.middlewares: traefik-https-redirect@kubernetescrd
-        name: ${CI_ENVIRONMENT_SLUG}-lunchplaner-public
+        name: lunchplaner-public
         labels:
-          app: lunchplaner
-          environment: $CI_ENVIRONMENT_SLUG
+          app.kubernetes.io/name: lunchplaner
       spec:
         rules:
         - host: lunch.kubernetes-public.it.liu.se
@@ -146,7 +215,14 @@ push:image:
             paths:
             - backend:
                 service:
-                  name: ${CI_ENVIRONMENT_SLUG}-lunchplaner
+                  name: lunchplaner-backend
+                  port:
+                    number: 80
+              path: /api
+              pathType: Prefix
+            - backend:
+                service:
+                  name: lunchplaner-frontend
                   port:
                     number: 80
               path: /
@@ -163,10 +239,9 @@ push:image:
         annotations:
           kubernetes.io/tls-acme: "true"
           traefik.ingress.kubernetes.io/router.middlewares: traefik-https-redirect@kubernetescrd
-        name: ${CI_ENVIRONMENT_SLUG}-lunchplaner
+        name: lunchplaner
         labels:
-          app: lunchplaner
-          environment: $CI_ENVIRONMENT_SLUG
+          app.kubernetes.io/name: lunchplaner
       spec:
         rules:
         - host: lunch.kubernetes.it.liu.se
@@ -174,7 +249,14 @@ push:image:
             paths:
             - backend:
                 service:
-                  name: ${CI_ENVIRONMENT_SLUG}-lunchplaner
+                  name: lunchplaner-backend
+                  port:
+                    number: 80
+              path: /api
+              pathType: Prefix
+            - backend:
+                service:
+                  name: lunchplaner-frontend
                   port:
                     number: 80
               path: /

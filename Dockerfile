@@ -25,4 +25,4 @@ RUN bundle config set --local path 'vendor' \
  && bundle config set --local without 'development'
 
 EXPOSE 9292/tcp
-CMD ["bundle", "exec", "thin", "start", "--threaded", "--threadpool-size", "32", "--port", "9292"]
+CMD ["bundle", "exec", "thin", "start", "--threaded", "--threadpool-size", "4", "--port", "9292"]
