@@ -243,7 +243,7 @@ push:image:
       metadata:
         annotations:
           kubernetes.io/tls-acme: "true"
-          cert-manager.io/cluster-issuer: letsencrypt
+          cert-manager.io/cluster-issuer: ca-it-liu-se
           traefik.ingress.kubernetes.io/router.middlewares: traefik-https-redirect@kubernetescrd
         name: lunchplaner
         labels:
@@ -269,7 +269,7 @@ push:image:
               pathType: Prefix
         tls:
         - hosts:
-          - lunch.kubernetes.it.liu.se
+          - '*.kubernetes.it.liu.se'
           secretName: lunchplaner-tls
       EOF
   variables:
