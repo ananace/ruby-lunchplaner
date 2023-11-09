@@ -208,6 +208,7 @@ push:image:
         annotations:
           kubernetes.io/ingress.class: nginx-public
           kubernetes.io/tls-acme: "true"
+          cert-manager.io/cluster-issuer: letsencrypt
           traefik.ingress.kubernetes.io/router.middlewares: traefik-https-redirect@kubernetescrd
         name: lunchplaner-public
         labels:
@@ -233,7 +234,7 @@ push:image:
               pathType: Prefix
         tls:
         - hosts:
-          - '*.kubernetes-public.it.liu.se'
+          - lunch.kubernetes-public.it.liu.se
           secretName: lunchplaner-public-tls
       ---
       # Internal only ingress
@@ -242,6 +243,7 @@ push:image:
       metadata:
         annotations:
           kubernetes.io/tls-acme: "true"
+          cert-manager.io/cluster-issuer: letsencrypt
           traefik.ingress.kubernetes.io/router.middlewares: traefik-https-redirect@kubernetescrd
         name: lunchplaner
         labels:
@@ -267,7 +269,7 @@ push:image:
               pathType: Prefix
         tls:
         - hosts:
-          - '*.kubernetes.it.liu.se'
+          - lunch.kubernetes.it.liu.se
           secretName: lunchplaner-tls
       EOF
   variables:
