@@ -25,6 +25,14 @@ module Lunchplaner
 
       private
 
+      PRODUCT_LIST = %w[
+        724424a0-f7f8-4ecf-9569-9f828163ff66
+        4323000c-6aa1-4724-8dfe-231be5521a2e
+        5d09056e-97ee-449d-9efa-36dbc648b26c
+        0bfae91e-be52-4db8-b098-24248a728af7
+        9b12f63e-1d18-408e-8225-137957ab2391
+      ].freeze
+
       def raw_data
         Backend.cache.get_or_set("raw_data-#{self.class.name}", expires_in: 1 * 60 * 60) do
           puts "Refreshing cache for #{self.class.name}..."
@@ -45,13 +53,7 @@ module Lunchplaner
           q[:table] = 'products'
           q[:condition] = {
             id: {
-              '$in': %w[
-                724424a0-f7f8-4ecf-9569-9f828163ff66
-                4323000c-6aa1-4724-8dfe-231be5521a2e
-                5d09056e-97ee-449d-9efa-36dbc648b26c
-                0bfae91e-be52-4db8-b098-24248a728af7
-                9b12f63e-1d18-408e-8225-137957ab2391
-              ]
+              '$in': PRODUCT_LIST
             }
           }
 
