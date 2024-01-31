@@ -243,7 +243,7 @@ push:image:
       metadata:
         annotations:
           kubernetes.io/tls-acme: "true"
-          cert-manager.io/cluster-issuer: ca-it-liu-se
+          cert-manager.io/cluster-issuer: public-ca-it-liu-se
           traefik.ingress.kubernetes.io/router.middlewares: traefik-https-redirect@kubernetescrd
         name: lunchplaner
         labels:
