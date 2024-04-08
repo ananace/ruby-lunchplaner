@@ -36,6 +36,7 @@ module Lunchplaner
       #  0bfae91e-be52-4db8-b098-24248a728af7
 
       def raw_data
+        # rubocop:disable Metrics/BlockLength
         Backend.cache.get_or_set("raw_data-#{self.class.name}", expires_in: 1 * 60 * 60) do
           puts "Refreshing cache for #{self.class.name}..."
 
@@ -77,6 +78,7 @@ module Lunchplaner
             weekly: select + weekly
           }
         end
+        # rubocop:enable Metrics/BlockLength
       end
 
       def data
