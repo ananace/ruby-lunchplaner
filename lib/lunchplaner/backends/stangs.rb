@@ -27,11 +27,13 @@ module Lunchplaner
 
       PRODUCT_LIST = %w[
         724424a0-f7f8-4ecf-9569-9f828163ff66
+
         4323000c-6aa1-4724-8dfe-231be5521a2e
         5d09056e-97ee-449d-9efa-36dbc648b26c
-        0bfae91e-be52-4db8-b098-24248a728af7
         9b12f63e-1d18-408e-8225-137957ab2391
       ].freeze
+      # Chokladmousse - also in mealoftheweeks
+      #  0bfae91e-be52-4db8-b098-24248a728af7
 
       def raw_data
         Backend.cache.get_or_set("raw_data-#{self.class.name}", expires_in: 1 * 60 * 60) do
@@ -46,9 +48,10 @@ module Lunchplaner
               }
             }
           }
+
           u = URI('https://db20.bokad.se/find')
           data = Net::HTTP.post(u, q.to_json, { 'Content-Type' => 'application/json' })
-          daily = data.body
+          daily = JSON.parse(data.body, symbolize_names: true)
 
           q[:table] = 'products'
           q[:condition] = {
@@ -58,11 +61,20 @@ module Lunchplaner
           }
 
           data = Net::HTTP.post(u, q.to_json, { 'Content-Type' => 'application/json' })
-          weekly = data.body
+          select = JSON.parse(data.body, symbolize_names: true)
+
+          q[:table] = 'mealoftheweeks'
+          q[:condition] = {
+            year: Time.now.year,
+            weekNumber: Time.now.strftime('%-V').to_i
+          }
+
+          data = Net::HTTP.post(u, q.to_json, { 'Content-Type' => 'application/json' })
+          weekly = JSON.parse(data.body, symbolize_names: true)
 
           {
-            daily: JSON.parse(daily, symbolize_names: true),
-            weekly: JSON.parse(weekly, symbolize_names: true)
+            daily: daily,
+            weekly: select + weekly
           }
         end
       end
@@ -74,7 +86,7 @@ module Lunchplaner
         end
 
         data = raw_data[:daily].dup
-        data.delete_if { |d| d[:name].downcase.include?('avh:') }
+        data.delete_if { |d| d[:name].match?(/(avh|ta):/i) }
         data.each do |d|
           d[:name].sub!(/dagens ?(rätt|grön[at])?:?/i, '')
           d[:name].strip!
@@ -98,8 +110,8 @@ module Lunchplaner
           data.delete_if { |d| d[:name].downcase.start_with?(name.downcase) }
         end
 
-        data = raw_data[:weekly].reverse
-        data.delete_if { |d| d[:name].downcase.start_with?('avh:') }
+        data = raw_data[:weekly]
+        data.delete_if { |d| d[:name].match?(/(avh|ta):/i) }
 
         weekly += data.reject { |d| d[:description].empty? }.map(&map_entry)
 
