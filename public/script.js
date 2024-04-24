@@ -123,6 +123,8 @@ var App = createApp({
       document.cookie = 'theme=' + this.theme;
       var stylesheet = document.querySelector('link[name="theme"]');
       stylesheet.href = 'bootstrap-' + this.theme + '.min.css';
+
+      document.getElementById('app').className = this.theme;
     },
     reloadLayout() {
       if (!masonry) {
