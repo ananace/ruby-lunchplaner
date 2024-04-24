@@ -19,6 +19,7 @@ ENV RACK_ENV production
 
 COPY --from=builder /app $APP_HOME
 ADD public $APP_HOME/public/
+ADD views $APP_HOME/views/
 WORKDIR $APP_HOME
 
 RUN bundle config set --local path 'vendor' \
