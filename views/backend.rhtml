@@ -1,0 +1,65 @@
+<div class="cardholder col-sm-12 col-md-6 my-2" :class="{ 'col-lg-3': isKiosk }" data-backend-name="<%= clean_name %>" data-backend-cached="<%= backend.cached? %>">
+  <div class="card" :class="{ 'border-primary': hovered == '<%= clean_name %>', 'border-danger': backends['<%= clean_name %>'].error }" id="<%= clean_name %>" @mouseover="hovered = '<%= clean_name %>'" @mouseleave="hovered = null">
+    <div class="card-header d-flex w-100 justify-content-between">
+      <div><%= backend.name %></div>
+      <%- if backend.links.any? %>
+      <div class="btn-group btn-group-sm">
+        <%- backend.links.each do |link| %>
+          <a title="<%= link[:title] %>" class="btn btn-sm" :class="['btn-outline-' + mapTheme('<%= link.fetch(:colour, 'primary') %>')]" href="<%= link[:href] %>" target="<%= link.fetch(:target, '_blank') %>"><i :class="mapIcon('<%= link[:type] %>')"></i></a>
+        <%- end %>
+      </div>
+      <%- end %>
+    </div>
+    <div class="card-body">
+    <%- if backend.cached? %>
+      <%- if backend.open? %>
+        <%- if backend.daily %>
+      <h5 class="card-text">Idag:</h5>
+      <ul class="list-group list-group-flush">
+        <%- backend.daily.each do |meal| %>
+        <li class="list-group-item list-group-item-action border-0 rounded"><%= meal %></li>
+        <%- end %>
+      </ul>
+        <%- end %>
+        <%- if backend.weekly %>
+      <h5 class="card-text <%= backend.daily ? 'mt-4' : ''%>">Hela veckan:</h5>
+      <ul class="list-group list-group-flush">
+        <%- backend.weekly.each do |meal| %>
+        <li class="list-group-item list-group-item-action border-0 rounded"><%= meal %></li>
+        <%- end %>
+      </ul>
+        <%- end %>
+        <%- unless backend.daily || backend.weekly %>
+      <h4 class="card-text m-3">Ingen meny tillgänglig.</h4>
+        <%- end %>
+      <%- else %>
+      <h3 class="card-text m-3">Stängd.</h3>
+      <%- end %>
+    <%- else %>
+      <div v-if="backends['<%= clean_name %>'].error">
+        <div class="text-center"><h5>{{ backends['<%= clean_name %>'].error.toString() }}</h5></div>
+        <div class="error-summary mt-3" v-if="backends['<%= clean_name %>'].summary" v-html="backends['<%= clean_name %>'].summary"></div>
+      </div>
+      <div v-else-if="!backends['<%= clean_name %>'].loaded" class="m-5">
+        <h4 class="card-text m-3">Loading...</h4>
+      </div>
+      <div v-else-if="backends['<%= clean_name %>'].open == false">
+        <h3 class="card-text m-3">Stängd.</h3>
+      </div>
+      <div v-else>
+        <h5 class="card-text" v-if="backends['<%= clean_name %>'].daily">Idag:</h5>
+        <ul class="list-group list-group-flush" v-for="meal in backends['<%= clean_name %>'].daily" v-if="backends['<%= clean_name %>'].daily">
+          <li class="list-group-item list-group-item-action border-0 rounded">{{ meal }}</li>
+        </ul>
+
+        <h5 class="card-text" v-bind:class="{ 'mt-4': backends['<%= clean_name %>'].daily }" v-if="backends['<%= clean_name %>'].weekly">Hela veckan:</h5>
+        <ul class="list-group list-group-flush" v-for="meal in backends['<%= clean_name %>'].weekly" v-if="backends['<%= clean_name %>'].weekly">
+          <li class="list-group-item list-group-item-action border-0 rounded">{{ meal }}</li>
+        </ul>
+
+        <h4 class="card-text m-3" v-if="!backends['<%= clean_name %>'].daily && !backends['<%= clean_name %>'].weekly">Ingen meny tillgänglig.</h4>
+      </div>
+    <%- end %>
+    </div>
+  </div>
+</div>

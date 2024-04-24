@@ -27,6 +27,9 @@ module Lunchplaner
     # use Prometheus::Middleware::Exporter
 
     set :public_folder, 'public'
+    set :views, 'views'
+
+    set :erb, trim: '-'
 
     configure :development do
       require 'sinatra/reloader'
@@ -41,7 +44,30 @@ module Lunchplaner
     end
 
     get '/' do
-      send_file File.join(settings.public_folder, 'index.html')
+      backends = Lunchplaner::Backends.constants.sort
+
+      if params['num']
+        count = params['num'].to_i
+        page = (params['page'] || '0').to_i
+
+        backends = backends[(page * count), count]
+      end
+
+      locals = {}
+      locals[:theme] = request.cookies.fetch('theme', 'light')
+      locals[:theme] = 'dark' if params['dark']
+
+      erb :index, locals: locals do
+        backends.map do |c|
+          backend = Backends.const_get(c).new
+          clean_name = backend.clean_name
+
+          erb :backend, locals: {
+            backend: backend,
+            clean_name: clean_name
+          }
+        end.join "\n"
+      end
     end
 
     get '/api/?' do

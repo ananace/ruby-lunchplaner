@@ -25,6 +25,10 @@ module Lunchplaner
         'Dolce Vita Fika, Linköping'
       end
 
+      def cached?
+        true
+      end
+
       def links
         [
           { href: 'https://ace-test.rgw.ctrl-c.liu.se/dolce-vita-meny.jpg', type: 'far file-image', colour: 'primary', title: 'Meny' }

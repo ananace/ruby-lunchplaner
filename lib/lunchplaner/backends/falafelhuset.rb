@@ -21,6 +21,10 @@ module Lunchplaner
         'Falafelhuset, Linköping Universitet'
       end
 
+      def cached?
+        true
+      end
+
       def links
         [
           { href: 'https://ace-test.rgw.ctrl-c.liu.se/campusmenu.jpg', type: 'far file-image', colour: 'primary', title: 'Campus menyn' }

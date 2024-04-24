@@ -1,91 +1,50 @@
 const { createApp } = Vue;
 
+var staticData = {};
+document.querySelectorAll('[data-backend-name]').forEach(function(data) {
+  console.log("Loading backend");
+  console.log(data);
+  const backend = data.getAttribute('data-backend-name');
+  staticData[backend] = {
+    loaded: (data.getAttribute('data-backend-cached') == 'true')
+  };
+});
+
 var masonry = null;
 var App = createApp({
   data() {
     return {
-      backends: {},
+      backends: staticData,
       hovered: null,
       mapLink: null,
       cookie: document.cookie.split(';').map((w) => w.trim()),
-      query: window.location.search.replace('?','').split('&').filter((w) => w.length > 0)
+      query: window.location.search.replace('?','').split('&').filter((w) => w.length > 0),
+      theme: 'light',
     }
   },
 
   created() {
-    if (this.theme == 'light') {
-      document.getElementsByTagName('body')[0].style.backgroundColor = '#eee';
-    }
-    var theme = document.createElement('link');
-    theme.rel = 'stylesheet';
-    theme.href = 'bootstrap-' + this.theme + '.min.css';
-    document.getElementsByTagName('head')[0].appendChild(theme);
+    this.theme = (!this.hasQuery('light') && (this.hasQuery('dark') || this.getCookie('theme') == 'dark')) ? 'dark' : 'light';
 
-    var paginated = this.hasQuery('num');
     var self = this;
+    var promises = []
+    Object.keys(this.backends).forEach(function(backend) {
+      if (!self.backends[backend].loaded) {
+        console.log("Requesting data for " + backend);
+        promises.push(axios.get('/api/restaurant/' + backend).then(function(resp) {
+          console.log("Retrieved data for " + backend);
+          self.backends[backend] = resp.data;
+          self.backends[backend].loaded = true;
+        }).catch(function(error) {
+          self.setError(backend, error);
+        }));
+      }
+    });
 
-    var open = this.hasQuery('open') ? "?open=true" : "";
-
-    var restpromise = axios.get('/api/restaurants' + open);
-
-    if (paginated) {
-      restpromise.then(function(resp) {
-        var names = []
-        for (it in resp.data) {
-          names.push(it);
-        }
-        names.sort();
-
-        var perPage = Number(self.getQuery('num'));
-        var page = (Number(self.getQuery('page') || 1)) - 1;
-
-        var promises = []
-        names = names.slice(page * perPage, (page * perPage) + perPage);
-        names.forEach(function(backend) {
-          self.backends[backend] = resp.data[backend];
-
-          promises.push(axios.get('/api/restaurant/' + backend)
-               .then(function(resp) {
-            console.log("Retrieved data for " + backend);
-            self.backends[backend] = resp.data;
-            self.backends[backend].loaded = true;
-          }).catch(function(error) {
-            self.setError(backend, error);
-          }));
-        });
-
-        Promise.allSettled(promises).then(function() { self.reloadLayout(); });
-      });
-    } else {
-      restpromise.then(function(resp) {
-        var loaded = false;
-        for (it in self.backends) {
-          if (self.backends[it].loaded) {
-            loaded = true;
-          }
-        }
-
-        if (!loaded) {
-          self.backends = resp.data;
-        }
-      });
-
-      restpromise.then(function() {
-        var promises = []
-        Object.keys(self.backends).forEach(function(backend) {
-          promises.push(axios.get('/api/restaurant/' + backend).then(function(resp) {
-            console.log("Retrieved data for " + backend);
-            self.backends[backend] = resp.data;
-            self.backends[backend].loaded = true;
-          }).catch(function(error) {
-            self.setError(backend, error);
-          }).then(function() {
-            self.reloadLayout();
-          }));
-        });
-      });
-    }
+    self.reloadLayout();
+    Promise.allSettled(promises).then(function() { self.reloadLayout(); });
   },
+
   computed: {
     isKiosk() {
       return this.hasQuery('kiosk');
@@ -94,11 +53,6 @@ var App = createApp({
       return Object.keys(this.backends).sort();
     },
     theme() {
-      if (!this.hasQuery('light') && (this.hasQuery('dark') || this.getCookie('theme') == 'dark')) {
-        return 'dark';
-      } else {
-        return 'light';
-      }
     },
     containerClass() {
       return {
@@ -159,18 +113,15 @@ var App = createApp({
       }
     },
     switchTheme(_) {
-      var query = this.query.filter((w) => w != 'dark' && w != 'light');
       if (this.theme == 'light') {
-        document.cookie = 'theme=dark';
+        this.theme = 'dark';
       } else {
-        document.cookie = 'theme=light';
+        this.theme = 'light';
       }
 
-      if (query.length == 0) {
-        document.location.search = '';
-      } else {
-        document.location.search = '?' + query.filter((w) => w.length > 0).join('&');
-      }
+      document.cookie = 'theme=' + this.theme;
+      var stylesheet = document.querySelector('link[name="theme"]');
+      stylesheet.href = 'bootstrap-' + this.theme + '.min.css';
     },
     reloadLayout() {
       if (!masonry) {

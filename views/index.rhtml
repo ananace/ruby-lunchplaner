@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link name="theme" rel="stylesheet" href="bootstrap-<%= theme %>.min.css" />
+    <title>Lunchrestauranger, nära Linköpings universitet</title>
+  </head>
+  <body>
+    <div id="app" class="<%= theme %>">
+      <div :class="containerClass">
+        <div class="position-absolute top-0 start-0 m-2">
+          <div v-on:click="switchTheme" class="btn btn-sm" :class="['btn-outline-' + mapTheme('THEME')]" title="Switch theme"><i class="fa" :class="{ 'fa-sun': theme=='dark', 'fa-moon': theme=='light' }"></i></div>
+        </div>
+
+        <div class="row my-2" :class="{ 'meny-kiosk': isKiosk, 'mt-5': isKiosk }" id="menyer">
+          <%= yield %>
+        </div>
+
+        <footer class="text-center">
+          <p class="text-muted font-weight-light">Projektet kan återfinnas på <a href="https://gitlab.liu.se/aleol57/lunchplaner">GitLab</a>, skapa ärenden där för tilläggning av fler restauranger.</p>
+        </footer>
+      </div>
+    </div>
+
+    <style>
+      #app.light:root body {
+        background-color: #eee;
+      }
+
+      .error-summary {
+        font-size: 0.75rem;
+      }
+
+      .error-summary > h1 {
+        font-size: 1rem;
+      }
+      
+      .error-summary > h2 {
+        font-size: 0.9rem;
+        margin-top: -5px;
+      }
+    </style>
+
+    <script src="//unpkg.com/vue@3.2.37/dist/vue.global.prod.js"></script>
+    <script src="//unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous"></script>
+
+    <script src="script.js"></script>
+  </body>
+</html>

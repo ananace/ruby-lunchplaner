@@ -59,14 +59,26 @@ module Lunchplaner
       to_s
     end
 
+    def clean_name
+      self.class.name.split('::').last.underscore
+    end
+
+    def cached?
+      Backend.cache.set? cache_key
+    end
+
     def self.cache
       @cache ||= MiniCache::Store.new
     end
 
     protected
 
+    def cache_key
+      "raw_data-#{self.class.name}"
+    end
+
     def raw_data
-      Backend.cache.get_or_set("raw_data-#{self.class.name}", expires_in: 1 * 60 * 60) do
+      Backend.cache.get_or_set(cache_key, expires_in: 1 * 60 * 60) do
         puts "Refreshing cache for #{self.class.name}..."
         Nokogiri::HTML(URI(url).open(read_timeout: 15))
       end
