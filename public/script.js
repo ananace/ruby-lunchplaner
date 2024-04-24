@@ -37,12 +37,13 @@ var App = createApp({
           self.backends[backend].loaded = true;
         }).catch(function(error) {
           self.setError(backend, error);
+        }).then(function() {
+          self.reloadLayout();
         }));
       }
     });
 
     self.reloadLayout();
-    Promise.allSettled(promises).then(function() { self.reloadLayout(); });
   },
 
   computed: {
