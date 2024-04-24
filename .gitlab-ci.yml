@@ -60,69 +60,14 @@ push:image:
           app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
         labels:
           app.kubernetes.io/name: lunchplaner
-          app.kubernetes.io/component: frontend
           app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
-        name: lunchplaner-frontend
-      spec:
-        replicas: 2
-        revisionHistoryLimit: 1
-        selector:
-          matchLabels:
-            app.kubernetes.io/name: lunchplaner
-            app.kubernetes.io/component: frontend
-        template:
-          metadata:
-            annotations:
-              prometheus.io/port: "9292"
-              prometheus.io/scrape: "true"
-              se.liu.gitlab/commit: $CI_COMMIT_SHA
-              app.gitlab.com/app: $CI_PROJECT_PATH_SLUG
-              app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
-            labels:
-              app.kubernetes.io/name: lunchplaner
-              app.kubernetes.io/component: frontend
-          spec:
-            containers:
-            - image: $CI_REGISTRY_IMAGE
-              imagePullPolicy: Always
-              name: lunchplaner
-              ports:
-              - containerPort: 9292
-                protocol: TCP
-                name: web
-              livenessProbe:
-                httpGet:
-                  port: 9292
-                  path: '/healthz'
-              readinessProbe:
-                tcpSocket:
-                  port: 9292
-              resources:
-                limits:
-                  cpu: 100m
-                  memory: 80Mi
-                requests:
-                  cpu: 100m
-                  memory: 80Mi
-      ---
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        annotations:
-          app.gitlab.com/app: $CI_PROJECT_PATH_SLUG
-          app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
-        labels:
-          app.kubernetes.io/name: lunchplaner
-          app.kubernetes.io/component: backend
-          app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
-        name: lunchplaner-backend
+        name: lunchplaner
       spec:
         replicas: 1
         revisionHistoryLimit: 1
         selector:
           matchLabels:
             app.kubernetes.io/name: lunchplaner
-            app.kubernetes.io/component: backend
         template:
           metadata:
             annotations:
@@ -133,7 +78,6 @@ push:image:
               app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
             labels:
               app.kubernetes.io/name: lunchplaner
-              app.kubernetes.io/component: backend
           spec:
             containers:
             - image: $CI_REGISTRY_IMAGE
@@ -163,9 +107,8 @@ push:image:
       metadata:
         labels:
           app.kubernetes.io/name: lunchplaner
-          app.kubernetes.io/component: frontend
           app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
-        name: lunchplaner-frontend
+        name: lunchplaner
       spec:
         ports:
         - name: web
@@ -174,26 +117,6 @@ push:image:
           targetPort: 9292
         selector:
           app.kubernetes.io/name: lunchplaner
-          app.kubernetes.io/component: frontend
-        type: ClusterIP
-      ---
-      apiVersion: v1
-      kind: Service
-      metadata:
-        labels:
-          app.kubernetes.io/name: lunchplaner
-          app.kubernetes.io/component: backend
-          app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
-        name: lunchplaner-backend
-      spec:
-        ports:
-        - name: web
-          port: 80
-          protocol: TCP
-          targetPort: 9292
-        selector:
-          app.kubernetes.io/name: lunchplaner
-          app.kubernetes.io/component: backend
         type: ClusterIP
       EOF
     - |
@@ -220,14 +143,7 @@ push:image:
             paths:
             - backend:
                 service:
-                  name: lunchplaner-backend
-                  port:
-                    number: 80
-              path: /api
-              pathType: Prefix
-            - backend:
-                service:
-                  name: lunchplaner-frontend
+                  name: lunchplaner
                   port:
                     number: 80
               path: /
@@ -255,14 +171,7 @@ push:image:
             paths:
             - backend:
                 service:
-                  name: lunchplaner-backend
-                  port:
-                    number: 80
-              path: /api
-              pathType: Prefix
-            - backend:
-                service:
-                  name: lunchplaner-frontend
+                  name: lunchplaner
                   port:
                     number: 80
               path: /
