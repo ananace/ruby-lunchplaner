@@ -37,6 +37,7 @@ module Lunchplaner
 
         month = MONTHS[Time.now.month].downcase
         now = blocks.find { |b| b.at_css('.rich-text-standard > p > strong').text.downcase.include? month }
+        return unless now
 
         now.at_css('.rich-text-standard > p:nth-child(2)').text
       rescue StandardError => e
