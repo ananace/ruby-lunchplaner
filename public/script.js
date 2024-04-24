@@ -6,7 +6,8 @@ document.querySelectorAll('[data-backend-name]').forEach(function(data) {
   console.log(data);
   const backend = data.getAttribute('data-backend-name');
   staticData[backend] = {
-    loaded: (data.getAttribute('data-backend-cached') == 'true')
+    open: (data.getAttribute('data-backend-open') == 'true'),
+    loaded: (data.getAttribute('data-backend-cached') == 'true' || data.getAttribute('data-backend-open') != 'true'),
   };
 });
 
