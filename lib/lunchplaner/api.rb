@@ -44,7 +44,8 @@ module Lunchplaner
     end
 
     get '/' do
-      backends = Lunchplaner::Backends.constants.sort
+      backends = Lunchplaner::Backends.constants.sort.map { |c| Backends.const_get(c).new }
+      backends = backends.select!(&:open?) if params.key?('open')
 
       if params['num']
         count = params['num'].to_i
@@ -55,11 +56,10 @@ module Lunchplaner
 
       locals = {}
       locals[:theme] = request.cookies.fetch('theme', 'light')
-      locals[:theme] = 'dark' if params['dark']
+      locals[:theme] = 'dark' if params.key?('dark')
 
       erb :index, locals: locals do
-        backends.map do |c|
-          backend = Backends.const_get(c).new
+        backends.map do |backend|
           clean_name = backend.clean_name
 
           erb :backend, locals: {
