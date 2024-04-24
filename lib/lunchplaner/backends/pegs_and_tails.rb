@@ -41,7 +41,7 @@ module Lunchplaner
             end
             cur = []
           else
-            cur << sect.text.sub(/\d+:-/, '').strip
+            cur << sect.text.sub(/\d+:-/, '').gsub(/\s+/, ' ').strip
           end
         end
 
