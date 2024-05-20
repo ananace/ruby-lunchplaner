@@ -30,6 +30,11 @@ module Lunchplaner
         sections.each do |sect|
           if sect.name == 'div'
             target += 1 if sect.classes.include? 'elementor-widget-divider'
+            next
+          end
+
+          if (title = sect.at_css('.meny-titel'))
+            cur << title.text.strip
           elsif sect.classes.include? 'elementor-hidden-desktop'
             cur = cur.reject(&:empty?).compact
             next if cur.empty?
@@ -41,7 +46,10 @@ module Lunchplaner
             end
             cur = []
           else
-            cur << sect.text.sub(/\d+:-/, '').gsub(/\s+/, ' ').strip
+            ingredients = sect.at_css('.meny-innehall').text.gsub(/\s+/, ' ').strip
+            allergens = sect.at_css('.meny-allergi').text.strip
+            ingredients += " (#{allergens})" unless allergens.empty?
+            cur << ingredients
           end
         end
 
