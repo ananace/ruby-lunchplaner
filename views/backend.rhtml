@@ -11,7 +11,7 @@
       <%- end %>
     </div>
     <div class="card-body">
-    <%- if backend.cached? %>
+    <%- if backend.cached? || !backend.open? %>
       <%- if backend.open? %>
         <%- if backend.daily %>
       <h5 class="card-text">Idag:</h5>
