@@ -94,16 +94,21 @@ module Lunchplaner
           d[:name].strip!
         end
 
-        name = data.first[:name]
-        daily = map_entry.call(data.first)
-        data.delete_if { |d| d[:name].downcase.include?(name.downcase) }
+        name = data.first&.[](:name)
+        if name
+          daily = map_entry.call(data.first)
+          data.delete_if { |d| d[:name].downcase.include?(name.downcase) }
+        end
 
-        name = data.first[:name]
-        daily_veg = map_entry.call(data.first)
-        data.delete_if { |d| d[:name].downcase.include?(name.downcase) }
+        name = data.first&.[](:name)
+        if name
+          daily_veg = map_entry.call(data.first)
+          data.delete_if { |d| d[:name].downcase.include?(name.downcase) }
+        end
 
         weekly = []
         loop do
+          break if data.empty?
           break unless data.first&.[](:name)&.start_with?('VECKANS')
 
           name = data.first[:name]
@@ -117,7 +122,7 @@ module Lunchplaner
 
         weekly += data.reject { |d| d[:description].empty? }.map(&map_entry)
 
-        { daily: [daily, daily_veg], weekly: weekly }
+        { daily: [daily, daily_veg].compact, weekly: weekly }
       end
     end
   end
