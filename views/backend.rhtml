@@ -13,6 +13,7 @@
     <div class="card-body">
     <%- if backend.cached? || !backend.open? %>
       <%- if backend.open? %>
+      <%- begin -%>
         <%- if backend.daily %>
       <h5 class="card-text">Idag:</h5>
       <ul class="list-group list-group-flush">
@@ -32,6 +33,10 @@
         <%- unless backend.daily || backend.weekly %>
       <h4 class="card-text m-3">Ingen meny tillgänglig.</h4>
         <%- end %>
+      <%- rescue StandardError => e %>
+        <div class="text-center"><h5><%= e.class %></h5></div>
+        <div class="error-summary mt-3"><%= e %></div>
+      <%- end -%>
       <%- else %>
       <h3 class="card-text m-3">Stängd.</h3>
       <%- end %>
