@@ -2,11 +2,11 @@
 
 require 'lunchplaner'
 
-require 'prometheus/middleware/collector'
-require 'prometheus/middleware/exporter'
-
-use Prometheus::Middleware::Collector
-use Prometheus::Middleware::Exporter
+# require 'prometheus/middleware/collector'
+# require 'prometheus/middleware/exporter'
+#
+# use Prometheus::Middleware::Collector
+# use Prometheus::Middleware::Exporter
 
 map '/healthz' do
   run ->(_env) { ['200', { 'Content-Type' => 'text/plain' }, ['OK']] }

@@ -2,9 +2,6 @@
 
 require 'sinatra/base'
 
-require 'prometheus/middleware/collector'
-require 'prometheus/middleware/exporter'
-
 class String
   def underscore
     gsub('::', '/')
@@ -23,9 +20,6 @@ end
 
 module Lunchplaner
   class API < Sinatra::Base
-    # use Prometheus::Middleware::Collector
-    # use Prometheus::Middleware::Exporter
-
     set :public_folder, 'public'
     set :views, 'views'
 
