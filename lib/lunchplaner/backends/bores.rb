@@ -6,7 +6,7 @@ module Lunchplaner
       url 'https://bores.se/'
 
       def open?
-        Time.now > Time.parse('2022-07-24')
+        Time.now > Time.parse('2024-09-22')
       end
 
       def map_search
