@@ -4,7 +4,7 @@ stages:
   - push
   - deploy
 
-image: "ruby"
+image: "docker.io/ruby"
 
 # Cache gems in between builds
 cache:
