@@ -23,8 +23,6 @@ module Lunchplaner
         'Stångs Mjärdevi'
       end
 
-      private
-
       PRODUCT_LIST = %w[
         724424a0-f7f8-4ecf-9569-9f828163ff66
 
@@ -34,6 +32,8 @@ module Lunchplaner
       ].freeze
       # Chokladmousse - also in mealoftheweeks
       #  0bfae91e-be52-4db8-b098-24248a728af7
+
+      private
 
       def raw_data
         # rubocop:disable Metrics/BlockLength
