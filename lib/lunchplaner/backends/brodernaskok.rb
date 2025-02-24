@@ -20,18 +20,10 @@ module Lunchplaner
       private
 
       def data
-        blocks = raw_data.css('.menu-section')
-
-        daily = blocks.css('.menu-item').select { |b| b.css('.menu-item-title').text.include?(WEEKDAYS[Time.now.wday]) }
-        weekly = blocks.find { |b| b.at_css('.menu-section-header').text.include? 'Säsongens' }
-
-        today = daily.map { |b| b.css('.menu-item-title').find { |i| i.text.include?(WEEKDAYS[Time.now.wday]) } }
-
-        d = { weekly: weekly.css('.menu-item-title').map(&:text) }
-        return d if today.empty?
-
-        d[:daily] = today.compact.map { |i| i.text.gsub(DAY_REX, '').sub(/ [-I|l] /, '') }
-        d
+        {
+          daily: raw_data.at_css("p:contains('#{WEEKDAYS[Time.now.wday]}')").text.gsub(DAY_REX, '').sub(/ [-I|l] /, ''),
+          weekly: raw_data.css('h1:contains("meny") ~ p.sqsrte-large').map(&:text)
+        }
       end
     end
   end
