@@ -22,7 +22,8 @@ ADD public $APP_HOME/public/
 ADD views $APP_HOME/views/
 WORKDIR $APP_HOME
 
-RUN bundle config set --local path 'vendor' \
+RUN apk add --no-cache libstdc++ \
+ && bundle config set --local path 'vendor' \
  && bundle config set --local without 'development'
 
 EXPOSE 9292/tcp
