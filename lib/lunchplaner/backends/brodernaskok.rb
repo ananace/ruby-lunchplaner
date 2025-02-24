@@ -21,7 +21,7 @@ module Lunchplaner
 
       def data
         {
-          daily: raw_data.at_css("p:contains('#{WEEKDAYS[Time.now.wday]}')").text.gsub(DAY_REX, '').sub(/ [-I|l] /, ''),
+          daily: [raw_data.at_css("p:contains('#{WEEKDAYS[Time.now.wday]}')").text.gsub(DAY_REX, '').sub(/ [-I|l] /, '')],
           weekly: raw_data.css('h1:contains("meny") ~ p.sqsrte-large').map(&:text)
         }
       end
