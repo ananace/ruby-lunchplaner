@@ -25,8 +25,8 @@ module Lunchplaner
 
       def links
         [
-          super[1],
-          { href: 'https://ace-test.rgw.ctrl-c.liu.se/campusmenu.jpg', type: 'far file-image', colour: 'primary', title: 'Campus menyn' }
+          { href: 'https://ace-test.rgw.ctrl-c.liu.se/campusmenu.jpg', type: 'far file-image', colour: 'primary', title: 'Campus menyn' },
+          super[1]
         ]
       end
     end
