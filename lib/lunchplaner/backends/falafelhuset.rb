@@ -3,8 +3,6 @@
 module Lunchplaner
   module Backends
     class Falafelhuset < Lunchplaner::Backend
-      url 'https://falafelhusetuniversitet.business.site/'
-
       def weekly
         [
           'Falafel bröd/rulle/tallrik/sallad',
@@ -27,8 +25,9 @@ module Lunchplaner
 
       def links
         [
-          { href: 'https://ace-test.rgw.ctrl-c.liu.se/campusmenu.jpg', type: 'far file-image', colour: 'primary', title: 'Campus menyn' }
-        ] + super
+          { href: 'https://ace-test.rgw.ctrl-c.liu.se/campusmenu.jpg', type: 'far file-image', colour: 'primary', title: 'Campus menyn' },
+          super[1]
+        ]
       end
     end
   end
