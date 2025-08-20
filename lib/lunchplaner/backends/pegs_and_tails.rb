@@ -26,10 +26,10 @@ module Lunchplaner
         weekly = []
 
         cur = []
-        target = 0
+        heading_counts = 0
         sections.each do |sect|
           if sect.name == 'div'
-            target += 1 if sect.classes.include? 'elementor-widget-divider'
+            heading_counts += 1 if sect.classes.include? 'elementor-widget-heading'
             next
           end
 
@@ -39,7 +39,7 @@ module Lunchplaner
             cur = cur.reject(&:empty?).compact
             next if cur.empty?
 
-            if target == 1
+            if heading_counts <= 1
               daily << cur.join(' - ')
             else
               weekly << cur.join(' - ')
