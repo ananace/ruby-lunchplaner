@@ -14,19 +14,19 @@ module Lunchplaner
       protected
 
       def data
-        correct_week = raw_data.at_css('#current') || raw_data
-        items = correct_week.at_css('.menu-container .menu-col')
+        correct_week = raw_data.at_css('.castit-weekpanel.is-active') || raw_data
+        items = correct_week.at_css('.castit-menu-grid')
         return nil unless items
-
-        day = Time.now.wday
-        return nil if day.zero? || day > 5
 
         broken_encoding = items.content.include?(Lunchplaner::Backend::LATIN1_DETECT) ||
                           items.content.include?(Lunchplaner::Backend::LATIN1_DETECT2)
 
-        wday = Lunchplaner::Backend::WEEKDAYS_EN[day].downcase
-        content = items.css(".#{wday} p").map(&:content)
-        content = items.css(".menu-item:nth-child(#{day}) p").map(&:content) if content.empty?
+        day = Time.now.wday
+        return nil if day.zero? || day > 5
+
+        content = items.css("section.castit-day:nth-of-type(#{day}) .castit-dish").map do |dish|
+          dish.css('span').map(&:content).map(&:strip).join(' ')
+        end
 
         content.map! { |c| c.encode('ISO-8859-1', 'UTF-8').tap { |mc| mc.force_encoding('UTF-8') } } if broken_encoding
         content.map!(&:strip)
