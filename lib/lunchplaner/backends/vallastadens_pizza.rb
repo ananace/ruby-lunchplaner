@@ -3,21 +3,18 @@
 module Lunchplaner
   module Backends
     class VallastadensPizza < Lunchplaner::Backend
-      url 'http://www.vallastadenspizza.se/index.html'
+      url 'https://www.vallastadenspizza.se/'
 
-      def weekly
-        data[:weekly]
+      def daily
+        %w[Pizza Kebab Kyckling Falafel Gyros Hamburgare Schnitzel Lasagne Sallad]
       end
 
       def to_s
-        'Vallastadens Pizza'
+        'Vallastadens Pizzeria'
       end
 
-      private
-
-      def data
-        weekly = raw_data.at_css('.layout-cell.layout-item-1 > h4').inner_html.split('<br>').map { |t| t.sub('•', '').strip }
-        { weekly: weekly }
+      def cached?
+        true
       end
     end
   end

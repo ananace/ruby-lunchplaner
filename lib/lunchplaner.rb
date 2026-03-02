@@ -28,6 +28,7 @@ module Lunchplaner
     autoload :Karallen,            'lunchplaner/backends/karallen'
     autoload :LaFontana,           'lunchplaner/backends/la_fontana'
     autoload :PegsAndTails,        'lunchplaner/backends/pegs_and_tails'
+    autoload :Shafinori,           'lunchplaner/backends/shafinori'
     autoload :SpicyWokNRoll,       'lunchplaner/backends/spicy_wok_n_roll'
     autoload :Studenthuset,        'lunchplaner/backends/studenthuset'
     autoload :Stangs,              'lunchplaner/backends/stangs'

@@ -17,10 +17,6 @@ module Lunchplaner
         'Dolce Vita Fika, Linköping'
       end
 
-      def cached?
-        true
-      end
-
       def links
         [
           { href: 'https://dolcevitacafe.se/images/menu.png', type: 'far file-image', colour: 'primary', title: 'Meny' }
@@ -29,6 +25,10 @@ module Lunchplaner
 
       def to_s
         'Dolce Vita'
+      end
+
+      def cached?
+        true
       end
     end
   end

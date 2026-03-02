@@ -9,6 +9,10 @@ module Lunchplaner
         'BESTIA'
       end
 
+      def cached?
+        true
+      end
+
       def open?
         Time.now.friday?
       end
