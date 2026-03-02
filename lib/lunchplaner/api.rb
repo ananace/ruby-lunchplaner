@@ -2,21 +2,8 @@
 
 require 'sinatra/base'
 
-class String
-  def underscore
-    gsub('::', '/')
-      .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
-      .gsub(/([a-z])([A-Z])/, '\1_\2')
-      .tr('-', '_')
-      .downcase
-  end
-end
-
-class Class
-  def demodularized
-    name.split('::').last
-  end
-end
+require_relative 'util/class'
+require_relative 'util/string'
 
 module Lunchplaner
   class API < Sinatra::Base
