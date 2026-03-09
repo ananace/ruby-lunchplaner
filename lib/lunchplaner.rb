@@ -22,8 +22,8 @@ module Lunchplaner
     autoload :BrodernasKok,        'lunchplaner/backends/brodernaskok'
     autoload :ChiliLime,           'lunchplaner/backends/chililime'
     autoload :DolceVita,           'lunchplaner/backends/dolce_vita'
-    # Main company bankrupt at 2022-06-02, university location still open
-    autoload :Falafelhuset,        'lunchplaner/backends/falafelhuset'
+    # Main company bankrupt at 2022-06-02, university location still open?
+    #autoload :Falafelhuset,        'lunchplaner/backends/falafelhuset'
     autoload :Husman,              'lunchplaner/backends/husman'
     autoload :Karallen,            'lunchplaner/backends/karallen'
     autoload :LaFontana,           'lunchplaner/backends/la_fontana'
