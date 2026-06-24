@@ -30,7 +30,6 @@ module Lunchplaner
     autoload :SpicyWokNRoll,       'lunchplaner/backends/spicy_wok_n_roll'
     autoload :Studenthuset,        'lunchplaner/backends/studenthuset'
     autoload :Stangs,              'lunchplaner/backends/stangs'
-    autoload :TomiSushi,           'lunchplaner/backends/tomi_sushi'
     autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben'
     autoload :VallastadensPizza,   'lunchplaner/backends/vallastadens_pizza'
   end
