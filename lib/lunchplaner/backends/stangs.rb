@@ -8,7 +8,9 @@ module Lunchplaner
       url 'https://stangsmjardevi.se'
 
       def open?
-        Time.parse('2022-07-09') > Time.now || Time.now > Time.parse('2022-08-08')
+        summer_start = Date.parse("#{Time.now.year}W28").to_time
+        summer_end = Date.parse("#{Time.now.year}W32").to_time
+        Time.now < summer_start || Time.now >= summer_end
       end
 
       def daily
