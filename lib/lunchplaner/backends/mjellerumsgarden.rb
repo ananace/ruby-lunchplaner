@@ -33,7 +33,9 @@ module Lunchplaner
       end
 
       def cached?
-        sommarmeny?
+        return true if sommarmeny?
+
+        super
       end
 
       private
