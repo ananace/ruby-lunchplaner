@@ -27,6 +27,10 @@ module Lunchplaner
         'Dolce Vita'
       end
 
+      def open?
+        false # Starting Des Café
+      end
+
       def cached?
         true
       end
