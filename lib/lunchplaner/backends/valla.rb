@@ -18,9 +18,9 @@ module Lunchplaner
       def daily
         data.css('div.elementor-widget-wrap.elementor-element-populated').each do |e|
           header = e.at_css('div[data-widget_type="heading.default"]')
-          next unless header&.text&.strip&.include? 'Dagens lunch'
+          next unless header && header.text.strip.include?('Dagens lunch')
 
-          return e.css('div.elementor-element').last.css('p')[0,2].map { |p| p.text }
+          return e.css('div.elementor-element').last.css('p')[0, 2].map(&:text)
         end
       end
     end
