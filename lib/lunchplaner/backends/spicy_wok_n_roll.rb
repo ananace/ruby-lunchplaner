@@ -6,7 +6,9 @@ module Lunchplaner
       url 'https://spicywoknroll.se/dagens-lunch'
 
       def open?
-        Time.now > Time.parse('2023-07-23')
+        summer_start = Date.parse("#{Time.now.year}W29").to_time
+        summer_end = Date.parse("#{Time.now.year}W30").to_time
+        Time.now < summer_start || Time.now >= summer_end
       end
 
       def daily
