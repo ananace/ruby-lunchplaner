@@ -8,3 +8,4 @@ gem 'minitest', group: :development
 gem 'rake', group: :development
 gem 'rubocop', group: :development
 gem 'sinatra-contrib', group: :development
+gem 'webrick', group: :development
