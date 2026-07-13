@@ -32,6 +32,7 @@ module Lunchplaner
     autoload :Studenthuset,        'lunchplaner/backends/studenthuset'
     autoload :Stangs,              'lunchplaner/backends/stangs'
     autoload :Universitetsklubben, 'lunchplaner/backends/universitetsklubben'
+    autoload :Valla,               'lunchplaner/backends/valla'
     autoload :VallastadensPizza,   'lunchplaner/backends/vallastadens_pizza'
   end
 
