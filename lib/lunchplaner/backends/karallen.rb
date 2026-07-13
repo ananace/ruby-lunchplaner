@@ -3,7 +3,7 @@
 module Lunchplaner
   module Backends
     class Karallen < Lunchplaner::Backend
-      url 'https://www.compass-group.se/'
+      url 'https://www.compass-group.se/restauranger-och-menyer/ovriga-restauranger/linkopings-universitet/'
 
       def to_s
         'Restaurang Kårallen'
@@ -14,7 +14,7 @@ module Lunchplaner
       end
 
       def daily
-        ['Mat av något slag, kanske?']
+        ['"goda vällagade lunch rätter"']
       end
 
       def cached?
