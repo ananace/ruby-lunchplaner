@@ -26,10 +26,10 @@ module Lunchplaner
       end
 
       def sommarmeny?
-        sStart = Date.parse("#{Time.now.year}W26").to_time
+        summer_start = Date.parse("#{Time.now.year}W26").to_time
         # FIXME: Find correct end-week
-        sEnd = Date.parse("#{Time.now.year}W42").to_time
-        Time.now >= sStart && Time.now < sEnd
+        summer_end = Date.parse("#{Time.now.year}W42").to_time
+        Time.now >= summer_start && Time.now < summer_end
       end
 
       def cached?
@@ -48,7 +48,7 @@ module Lunchplaner
               'Köttbullar',
               'Bakad lax',
               'Bakad spetskål',
-              'Sallader',
+              'Sallader'
             ]
           }
         end
