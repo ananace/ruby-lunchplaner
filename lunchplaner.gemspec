@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'http://gitlab.liu.se/aleol57/lunchplaner'
   spec.license       = 'MIT'
 
-  spec.required_ruby_version = '>= 3.0'
+  spec.required_ruby_version = '>= 3.3'
 
   spec.files         = Dir['{Gemfile,Rakefile,config.ru,lunchplaner.gemspec,{lib,test}/**/*.rb,bin/*}'].select { |f| File.file? f }
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
