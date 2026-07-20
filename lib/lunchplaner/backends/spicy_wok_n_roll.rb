@@ -12,6 +12,8 @@ module Lunchplaner
       end
 
       def daily
+        return if data[:daily].first.downcase.include? 'sommar'
+
         data[:daily]
       end
 
